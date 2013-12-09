@@ -1,0 +1,7 @@
+List of the words is (word, number of appearences):
+a 2
+Load factor is: 0.00002
+Max chain length is: 1. Number from this chain are:
+a 2
+Words added: 2
+Number of empty cells: 100006
