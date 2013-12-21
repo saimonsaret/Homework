@@ -77,5 +77,5 @@ void deleteHashTable(HashTable *table) {
 	for (int i = 0; i < maxHash; i++) {
 		recordDeleteList(table->cell[i]);
 	}
-	delete table->cell;
+	delete[] table->cell;
 }
