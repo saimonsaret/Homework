@@ -33,14 +33,17 @@ CipherTree *makeCipherTree(char *text) {
 			break;
 
 		CipherTreeNode *root = createCipherTreeNode();
+		CipherTree *tree = list->head->next->next->tree;
 		root->left = list->head->next->tree->root;
 		root->right = list->head->next->next->tree->root;
-		
 		list->head->next->next->tree->root = root;
 		ListElement *pastRoot = list->head->next;
-		list->head->next = list->head->next->next;
+		tree->value += pastRoot->tree->value;
+		list->head->next = list->head->next->next->next;
 		delete pastRoot->tree;
 		delete pastRoot;
+
+		addSortedElement(list, tree);
 	}
 
 	CipherTree *result = list->head->next->tree;
