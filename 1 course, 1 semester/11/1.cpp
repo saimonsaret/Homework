@@ -3,6 +3,13 @@
 #include <string.h>
 #include "polynomial.h"
 
+enum states {
+	EQUAL = 1,	
+	COUNT = 2,
+	SUM = 3, 
+	QUIT = 4
+};
+
 void printHelp() {
 	printf("If you want to see if two polynomials are equal, enter 1\n");
 	printf("If you want to find the value of the polynomial in some point, enter 2\n");
@@ -31,51 +38,56 @@ int main() {
 
 	int state = 0;
 
-	while (state != 4) {
-
-		SortedList *firstList = new SortedList;
-		firstList->head = createHead();
-		SortedList *secondList = new SortedList;
-		secondList->head = createHead();
-		SortedList *thirdList = new SortedList;
-		thirdList->head = createHead();
+	while (state != QUIT) {
 
 		printf("Enter your command:\n");
 		scanf("%d", &state);
 
-		if (state == 1) {
+		if (state == EQUAL) {
+
+			SortedList *firstPolynomial = createSortedList();
+			SortedList *secondPolynomial = createSortedList();
 
 			printf("Enter two polynomials\n");
-			readPolynomial(firstList);
-			readPolynomial(secondList);
-			if (isEqual(firstList, secondList))
+			readPolynomial(firstPolynomial);
+			readPolynomial(secondPolynomial);
+			if (areEqual(firstPolynomial, secondPolynomial))
 				printf("These polynomials are equal\n");
 			else
 
 				printf("These polynomials are different\n");
 
-		} else if (state == 2) {
+			deleteList(firstPolynomial);
+			deleteList(secondPolynomial);
 
-			readPolynomial(firstList);
+		} else if (state == COUNT) {
+
+			SortedList *polynomial = createSortedList();
+			readPolynomial(polynomial);
 			printf("Enter your point\n");
 			int value = 0;
 			scanf("%d", &value);
-			printf("Value of your polynomial in %d point: %lld\n", value, countPolynomial(firstList, value));
+			printf("Value of your polynomial in %d point: %lld\n", value, countPolynomial(polynomial, value));
 
-		} else if (state == 3) {
+			deleteList(polynomial);
+
+		} else if (state == SUM) {
+
+			SortedList *firstSummand = createSortedList();
+			SortedList *secondSummand = createSortedList();
+			SortedList *sum = createSortedList();	
 
 			printf("Enter two polynomials\n");
-			readPolynomial(firstList);
-			readPolynomial(secondList);
-			thirdList = listSum(firstList, secondList);
+			readPolynomial(firstSummand);
+			readPolynomial(secondSummand);
+			sum = listSum(firstSummand, secondSummand);
 			printf("The sum of these polynomials is:\n");
-			printList(thirdList);
+			printList(sum);
 
+			deleteList(firstSummand);
+			deleteList(secondSummand);
+			deleteList(sum);
 		}
-
-		deleteList(firstList);
-		deleteList(secondList);
-		deleteList(thirdList);
 	}
 
 	return 0;

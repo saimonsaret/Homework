@@ -2,6 +2,15 @@
 #include <iostream>
 #include <string.h>
 
+enum states {
+	NUMBER_SIGN = 0,
+	INTEGRAL_PART = 1, 
+	POINT = 2, 
+	FRACTIONAL_PART = 3, 
+	EXPONENT_SIGN = 4, 
+	EXPONENT = 5
+};
+
 using namespace std;
 
 const int maxLength = 1000;
@@ -18,7 +27,7 @@ bool matchAutomate(char *line) {
 
 	while (i < lineLength) {
 		switch (currentState) {
-			case 0:
+			case NUMBER_SIGN:
 				if (line[i] == '+' || line[i] == '-' || isNumber(line[i])) {
 					currentState = 1;
 					i++;
@@ -26,7 +35,7 @@ bool matchAutomate(char *line) {
 				else
 					return false;
 				break;
-			case 1: 
+			case INTEGRAL_PART: 
 				if (isNumber(line[i])) {
 					i++;
 				}
@@ -39,14 +48,14 @@ bool matchAutomate(char *line) {
 				} else
 					return false;
 				break;
-			case 2:
+			case POINT:
 				if (isNumber(line[i])) {
 					currentState = 3;
 					i++;
 				} else 
 					return false;
 				break;
-			case 3:
+			case FRACTIONAL_PART:
 				if (isNumber(line[i])) {
 					i++;
 				} else if (line[i] == 'E') {
@@ -55,7 +64,7 @@ bool matchAutomate(char *line) {
 				} else 
 					return false;
 				break;
-			case 4:
+			case EXPONENT_SIGN:
 				if (line[i] == '+' || line[i] == '-' || isNumber(line[i])) {
 					currentState = 5;
 					i++;
@@ -63,7 +72,7 @@ bool matchAutomate(char *line) {
 				else
 					return false;
 				break;
-			case 5:
+			case EXPONENT:
 				if (isNumber(line[i])) {
 					i++;
 				} else 
@@ -90,6 +99,8 @@ int main() {
 		printf("This line matches the automate");
 	else 
 		printf("Thils line does not match the automate");
+
+	delete[] line;
 
 	return 0;
 }

@@ -11,10 +11,11 @@ struct SortedList {
 	SortedListElement *head;
 };
 
-SortedListElement *createHead();
+SortedList *createSortedList();
+
 void addSortedElement(SortedList *list, int power, int coeff);
 
-bool isEqual(SortedList *firstList, SortedList *secondList);
+bool areEqual(SortedList *firstList, SortedList *secondList);
 
 long long countPolynomial(SortedList *list, int value);
 

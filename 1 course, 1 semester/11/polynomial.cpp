@@ -1,10 +1,13 @@
 #include "polynomial.h"
 #include <cstdio>
+#include <stdlib.h>
 
-SortedListElement *createHead() {
+SortedList *createSortedList() {
+	SortedList *newList = new SortedList;
 	SortedListElement *headElement = new SortedListElement;
 	headElement->next = nullptr;
-	return headElement;
+	newList->head = headElement;
+	return newList;
 }
 
 void createElement(SortedListElement *previousElement, SortedListElement *nextElement, int power, int coeff) {
@@ -42,7 +45,7 @@ void addSortedElement(SortedList *list, int power, int coeff) {
 	}
 }
 
-bool isEqual(SortedList *firstList, SortedList *secondList) {
+bool areEqual(SortedList *firstList, SortedList *secondList) {
 
 	SortedListElement *firstPointer = firstList->head->next;
 	SortedListElement *secondPointer = secondList->head->next;
@@ -80,8 +83,7 @@ long long countPolynomial(SortedList *list, int value) {
 
 SortedList *listSum(SortedList *firstList, SortedList *secondList) {
 
-	SortedList *list = new SortedList;
-	list->head = createHead();
+	SortedList *list = createSortedList();
 
 	SortedListElement *pointer = firstList->head->next;
 
