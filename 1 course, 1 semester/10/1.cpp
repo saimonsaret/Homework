@@ -36,7 +36,8 @@ int main() {
 		memset(line, 0, lineLength * sizeof(char));
 	}
 
-	CipherTree *tree = makeCipherTree(text);
+	int *count = nullptr;
+	CipherTree *tree = makeCipherTree(text, count);
 	
 	char **cipher = new char*[maxChar];
 	for (int i = 0; i < maxChar; i++) {
@@ -55,13 +56,19 @@ int main() {
 	printf("\n");
 
 	for (int i = 0; i < textLength; i++) {
-		printf("%s", cipher[text[i]]);
+		int index = text[i];
+		if (text[i] < 0) 
+			index += maxChar;
+		printf("%s", cipher[index]);
 	}
+
+	printStats(count, cipher, textLength);
 
 	delete[] text;
 	delete[] line;
 	delete[] currentCipher;
-
+	delete[] count;
+	
 	for (int i = 0; i < maxChar; i++)
 		delete[] cipher[i];
 	delete[] cipher;

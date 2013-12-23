@@ -41,6 +41,7 @@ void deleteCipherTree(CipherTree *tree) {
 
 void deleteElement(ListElement *element, ListElement *previousElement, ListElement *nextElement) {
 	deleteCipherTree(element->tree);
+	delete element;
 	previousElement->next = nextElement;
 }
 

@@ -2,7 +2,20 @@
 #include <iostream>	
 #include <string.h>
 
-CipherTree *makeCipherTree(char *text) {
+void makeBinary(int number, char *line) {
+
+	int rest = number;
+
+	for (int i = 7; i >= 0; i--)
+		if (rest - (1 << i) >= 0) {
+			rest -= 1 << i;
+			line[7 - i] = '1'; 
+		} else
+			line[7 - i] = '0';
+
+}
+
+CipherTree *makeCipherTree(char *text, int *&amount) {
 	int *count = new int[maxChar];
 	memset(count, 0, maxChar * sizeof(int));
 	int textLength = strlen(text);
@@ -31,25 +44,31 @@ CipherTree *makeCipherTree(char *text) {
 
 		if (list->head->next->next == nullptr)
 			break;
-
+		
 		CipherTreeNode *root = createCipherTreeNode();
-		CipherTree *tree = list->head->next->next->tree;
-		root->left = list->head->next->tree->root;
-		root->right = list->head->next->next->tree->root;
-		list->head->next->next->tree->root = root;
-		ListElement *pastRoot = list->head->next;
-		tree->value += pastRoot->tree->value;
-		list->head->next = list->head->next->next->next;
-		delete pastRoot->tree;
-		delete pastRoot;
+		ListElement *prevElement = list->head->next;
+		ListElement *currentElement = prevElement->next;
+		ListElement *nextElement = currentElement->next;
+		CipherTree *prevTree = prevElement->tree;
+		CipherTree *currentTree = currentElement->tree;
 
-		addSortedElement(list, tree);
+		root->left = prevTree->root;
+		root->right = currentTree->root;
+		currentTree->root = root;
+		currentTree->value += prevTree->value;
+		list->head->next = nextElement;
+
+		delete prevTree;
+		delete prevElement;
+		delete currentElement;
+
+		addSortedElement(list, currentTree);
 	}
 
 	CipherTree *result = list->head->next->tree;
-
+	
+	amount = count;
 	deleteList(list);
-	delete[] count;
 	return result;
 }
 
@@ -80,13 +99,22 @@ void printCipher(char **cipher) {
 	for (int i = 0; i < maxChar; i++) {
 		int cipherLength = strlen(cipher[i]);
 		memset(binary, 0, maxChar * sizeof(char));
-		itoa(cipherLength, binary, 2);
-		for (int i = 0; i < 8 - strlen(binary); i++)
-			printf("0");
+		makeBinary(cipherLength, binary);
 		printf("%s", binary);
 		printf("%s", cipher[i]);
 	}
 
+	delete[] binary;
+
+}
+
+void printStats(int *count, char **cipher, int textLength) {
+	freopen("stats.txt", "w", stdout);
+	
+	for (int i = 0; i < maxChar; i++) {
+		if (count[i] != 0)
+			printf("%c (code %d): %s, occurence in the text: %.5f\n", (char)i, i, cipher[i], (double)count[i] / (double)textLength);
+	}
 }
 
 void addCipherNode(CipherTreeNode *node, char *cipher, char symbol, int currentSymbol) {
