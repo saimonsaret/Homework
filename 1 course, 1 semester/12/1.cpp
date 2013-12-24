@@ -37,7 +37,7 @@ bool isCorrectSum(char *line, int &currentSymbol, int lineLength) {
 	return true;
 }
 
-	bool isCorrectPremultiplication(char *line, int &currentSymbol, int lineLength) {
+bool isCorrectPremultiplication(char *line, int &currentSymbol, int lineLength) {
 	
 	if (currentSymbol == lineLength)
 		return true;
