@@ -1,72 +1,79 @@
 #include "double.h"
 #include <iostream>
 
+enum States {
+	numberSign = 0,
+	integralPart = 1, 
+	point = 2, 
+	fractionalPart = 3, 
+	exponentSign = 4, 
+	exponent = 5
+};
+
 bool isNumber (char symbol) {
 	return (symbol >= '0' && symbol <= '9');
 }
 
-bool matchDoubleAutomate(char *line) {
+bool matchDoubleAutomate(char *line, int &currentSymbol, int lineLength) {
 	
-	int i = 0;
 	int currentState = 0;
-	int lineLength = strlen(line);
 
-	while (i < lineLength) {
+	while (currentSymbol < lineLength) {
 		switch (currentState) {
-			case 0:
-				if (line[i] == '+' || line[i] == '-' || isNumber(line[i])) {
-					currentState = 1;
-					i++;
+			case numberSign:
+				if (line[currentSymbol] == '+' || line[currentSymbol] == '-' || isNumber(line[currentSymbol])) {
+					currentState = integralPart;
+					currentSymbol++;
 				}
 				else
 					return false;
 				break;
-			case 1: 
-				if (isNumber(line[i])) {
-					i++;
+			case integralPart: 
+				if (isNumber(line[currentSymbol])) {
+					currentSymbol++;
 				}
-				else if (line[i] == '.') {
-					currentState = 2;
-					i++;
-				} else if (line[i] == 'E') {
-					currentState = 4;
-					i++;
+				else if (line[currentSymbol] == '.') {
+					currentState = point;
+					currentSymbol++;
+				} else if (line[currentSymbol] == 'E') {
+					currentState = exponentSign;
+					currentSymbol++;
 				} else
-					return false;
+					return true;
 				break;
-			case 2:
-				if (isNumber(line[i])) {
-					currentState = 3;
-					i++;
+			case point:
+				if (isNumber(line[currentSymbol])) {
+					currentState = fractionalPart;
+					currentSymbol++;
 				} else 
 					return false;
 				break;
-			case 3:
-				if (isNumber(line[i])) {
-					i++;
-				} else if (line[i] == 'E') {
-					currentState = 4;
-					i++;
+			case fractionalPart:
+				if (isNumber(line[currentSymbol])) {
+					currentSymbol++;
+				} else if (line[currentSymbol] == 'E') {
+					currentState = exponentSign;
+					currentSymbol++;
 				} else 
-					return false;
+					return true;
 				break;
-			case 4:
-				if (line[i] == '+' || line[i] == '-' || isNumber(line[i])) {
-					currentState = 5;
-					i++;
+			case exponentSign:
+				if (line[currentSymbol] == '+' || line[currentSymbol] == '-' || isNumber(line[currentSymbol])) {
+					currentState = exponent;
+					currentSymbol++;
 				}
 				else
 					return false;
 				break;
-			case 5:
-				if (isNumber(line[i])) {
-					i++;
+			case exponent:
+				if (isNumber(line[currentSymbol])) {
+					currentSymbol++;
 				} else 
-					return false;
+					return true;
 				break;
 		}			
 	}
 
-	return (i = lineLength && isNumber(line[lineLength - 1]));
+	return (currentSymbol == lineLength && isNumber(line[lineLength - 1]));
 
 }

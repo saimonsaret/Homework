@@ -1,5 +1,5 @@
-#include <cstdio>
 #include <iostream>
+#include <cstdio>
 #include <string.h>
 #include "double.h"
 
@@ -7,78 +7,96 @@ using namespace std;
 
 const int maxLength = 100000;
 
-bool isOperation(char symbol) {
-	return (symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/');
-}
 
-bool isCorrect(char *line, int leftBorder, int rightBorder) {
 
-	if (leftBorder > rightBorder)
-		return false;
+bool isCorrectSum(char *line, int &currentSymbol, int lineLength);
 
-	int lastCheck = leftBorder;
-	int balance = 0;
+bool isCorrectPremultiplication(char *line, int &currentSymbol, int lineLength);
 
-	for (int i = leftBorder; i <= rightBorder; i++) {
+bool isCorrectMultiplication(char *line, int &currentSymbol, int lineLength);
 
-		if (line[i] == '(')
-			balance++;
-		if (line[i] == ')')
-			balance--;
+bool isCorrectBracket(char *line, int &currentSymbol, int lineLength);
 
-		if (isOperation(line[i]) && balance == 0 && (i == leftBorder || line[i - 1] != 'E')) {
-			if (!isCorrect(line, lastCheck, i - 1))
-				return false;
-			lastCheck = i + 1;
-		}
-	}
+bool isCorrectExpression(char *line, int &currentSymbol, int lineLength);
 
-	if (lastCheck != leftBorder) {
-		return isCorrect(line, lastCheck, rightBorder);
-	}
 
-	int newLeftBorder = leftBorder;
-	int newRightBorder = rightBorder;
 
-	while (line[newLeftBorder] == ' ')
-		newLeftBorder++;
-	while (line[newRightBorder] == ' ')
-		newRightBorder--;
 
-	if (newLeftBorder > newRightBorder)
-		return false;
+bool isCorrectSum(char *line, int &currentSymbol, int lineLength) {
 
-	balance = 0;
+	if (currentSymbol == lineLength)
+		return true;
 
-	if (line[newLeftBorder] == '(' && line[newRightBorder] == ')') {
+	if (line[currentSymbol] == '+' || line[currentSymbol] == '-') {
 		
-		int border = -1;
+		currentSymbol++;
 
-		for (int i = newLeftBorder; i <= newRightBorder; i++) {
-			if (line[i] == '(')
-				balance++;
-			if (line[i] == ')')
-				balance--;
-			if (balance == 0) {
-				border = i;
-				break;
-			}
-		}
-		if (border == newRightBorder && balance == 0) 
-			return isCorrect(line, newLeftBorder + 1, newRightBorder - 1);
+		return (isCorrectPremultiplication(line, currentSymbol, lineLength) && isCorrectSum(line, currentSymbol, lineLength));
 	}
 
-	int numberLength = newRightBorder - newLeftBorder + 1;
-	char *number = new char[numberLength + 1];
-	memset(number, 0, (numberLength + 1) * sizeof(char));
-	for (int i = newLeftBorder; i <= newRightBorder; i++)
-		number[i - newLeftBorder] = line[i];
+	return true;
+}
 
-	bool ifMatches = matchDoubleAutomate(number);
-	delete[] number;
-	return ifMatches;
+	bool isCorrectPremultiplication(char *line, int &currentSymbol, int lineLength) {
+	
+	if (currentSymbol == lineLength)
+		return true;
+
+	return isCorrectBracket(line, currentSymbol, lineLength) && isCorrectMultiplication(line, currentSymbol, lineLength);
+}
+
+bool isCorrectMultiplication(char *line, int &currentSymbol, int lineLength) {
+	
+	if (currentSymbol == lineLength)
+		return true;
+
+	if (line[currentSymbol] == '*' || line[currentSymbol] == '/') {
+
+		currentSymbol++;
+
+		return isCorrectBracket(line, currentSymbol, lineLength) && isCorrectMultiplication(line, currentSymbol, lineLength);
+	}
+
+	return true;
 
 }
+
+bool isCorrectBracket(char *line, int &currentSymbol, int lineLength) {
+
+	if (currentSymbol == lineLength)
+		return true;
+
+	if (line[currentSymbol] == '(') {
+
+		currentSymbol++;
+		bool correct = isCorrectExpression(line, currentSymbol, lineLength);             
+
+		if (correct && line[currentSymbol] == ')') {
+			currentSymbol++;
+			return true;
+		}
+
+		return false;
+	}
+
+	int prevSymbol = currentSymbol;
+
+	if (matchDoubleAutomate(line, currentSymbol, lineLength))
+		return true;
+
+	currentSymbol = prevSymbol;
+	return false;
+}
+	
+bool isCorrectExpression(char *line, int &currentSymbol, int lineLength) {
+
+	if (currentSymbol == lineLength)
+		return true;
+
+	return (isCorrectPremultiplication(line, currentSymbol, lineLength) && isCorrectSum(line, currentSymbol, lineLength));
+}
+
+
 
 int main() {
 
@@ -91,13 +109,14 @@ int main() {
 	if (line[lineLength - 1] == 10) 
 		lineLength--;
 
+	int currentSymbol = 0;
 
-	if (isCorrect(line, 0, lineLength - 1))
+	if (isCorrectExpression(line, currentSymbol, lineLength) && (currentSymbol == lineLength))
 		printf("This expression is correct\n");
-	else
-		printf("This expression is not correct\n");
+    else
+        printf("This expression is not correct\n");
 
-	delete[] line;
-	
+    delete[] line;
+
 	return 0;
 }
