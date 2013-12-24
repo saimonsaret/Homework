@@ -29,7 +29,7 @@ bool matchAutomate(char *line) {
 		switch (currentState) {
 			case numberSign:
 				if (line[i] == '+' || line[i] == '-' || isNumber(line[i])) {
-					currentState = 1;
+					currentState = numberSign;
 					i++;
 				}
 				else
@@ -40,17 +40,17 @@ bool matchAutomate(char *line) {
 					i++;
 				}
 				else if (line[i] == '.') {
-					currentState = 2;
+					currentState = point;
 					i++;
 				} else if (line[i] == 'E') {
-					currentState = 4;
+					currentState = exponentSign;
 					i++;
 				} else
 					return false;
 				break;
 			case point:
 				if (isNumber(line[i])) {
-					currentState = 3;
+					currentState = fractionalPart;
 					i++;
 				} else 
 					return false;
@@ -59,14 +59,14 @@ bool matchAutomate(char *line) {
 				if (isNumber(line[i])) {
 					i++;
 				} else if (line[i] == 'E') {
-					currentState = 4;
+					currentState = exponentSign;
 					i++;
 				} else 
 					return false;
 				break;
 			case exponentSign:
 				if (line[i] == '+' || line[i] == '-' || isNumber(line[i])) {
-					currentState = 5;
+					currentState = exponent;
 					i++;
 				}
 				else
