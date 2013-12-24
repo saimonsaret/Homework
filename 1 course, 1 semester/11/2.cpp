@@ -2,13 +2,13 @@
 #include <iostream>
 #include <string.h>
 
-enum states {
-	NUMBER_SIGN = 0,
-	INTEGRAL_PART = 1, 
-	POINT = 2, 
-	FRACTIONAL_PART = 3, 
-	EXPONENT_SIGN = 4, 
-	EXPONENT = 5
+enum States {
+	numberSign = 0,
+	integralPart = 1, 
+	point = 2, 
+	fractionalPart = 3, 
+	exponentSign = 4, 
+	exponent = 5
 };
 
 using namespace std;
@@ -27,7 +27,7 @@ bool matchAutomate(char *line) {
 
 	while (i < lineLength) {
 		switch (currentState) {
-			case NUMBER_SIGN:
+			case numberSign:
 				if (line[i] == '+' || line[i] == '-' || isNumber(line[i])) {
 					currentState = 1;
 					i++;
@@ -35,7 +35,7 @@ bool matchAutomate(char *line) {
 				else
 					return false;
 				break;
-			case INTEGRAL_PART: 
+			case integralPart: 
 				if (isNumber(line[i])) {
 					i++;
 				}
@@ -48,14 +48,14 @@ bool matchAutomate(char *line) {
 				} else
 					return false;
 				break;
-			case POINT:
+			case point:
 				if (isNumber(line[i])) {
 					currentState = 3;
 					i++;
 				} else 
 					return false;
 				break;
-			case FRACTIONAL_PART:
+			case fractionalPart:
 				if (isNumber(line[i])) {
 					i++;
 				} else if (line[i] == 'E') {
@@ -64,7 +64,7 @@ bool matchAutomate(char *line) {
 				} else 
 					return false;
 				break;
-			case EXPONENT_SIGN:
+			case exponentSign:
 				if (line[i] == '+' || line[i] == '-' || isNumber(line[i])) {
 					currentState = 5;
 					i++;
@@ -72,7 +72,7 @@ bool matchAutomate(char *line) {
 				else
 					return false;
 				break;
-			case EXPONENT:
+			case exponent:
 				if (isNumber(line[i])) {
 					i++;
 				} else 

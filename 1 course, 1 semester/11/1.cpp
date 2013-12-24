@@ -3,11 +3,11 @@
 #include <string.h>
 #include "polynomial.h"
 
-enum states {
-	EQUAL = 1,	
-	COUNT = 2,
-	SUM = 3, 
-	QUIT = 4
+enum States {
+	equal = 1,	
+	count = 2,
+	sum = 3, 
+	quit = 4
 };
 
 void printHelp() {
@@ -38,12 +38,12 @@ int main() {
 
 	int state = 0;
 
-	while (state != QUIT) {
+	while (state != quit) {
 
 		printf("Enter your command:\n");
 		scanf("%d", &state);
 
-		if (state == EQUAL) {
+		if (state == equal) {
 
 			SortedList *firstPolynomial = createSortedList();
 			SortedList *secondPolynomial = createSortedList();
@@ -60,7 +60,7 @@ int main() {
 			deleteList(firstPolynomial);
 			deleteList(secondPolynomial);
 
-		} else if (state == COUNT) {
+		} else if (state == count) {
 
 			SortedList *polynomial = createSortedList();
 			readPolynomial(polynomial);
@@ -71,11 +71,11 @@ int main() {
 
 			deleteList(polynomial);
 
-		} else if (state == SUM) {
+		} else if (state == sum) {
 
 			SortedList *firstSummand = createSortedList();
 			SortedList *secondSummand = createSortedList();
-			SortedList *sum = createSortedList();	
+			SortedList *sum = nullptr;
 
 			printf("Enter two polynomials\n");
 			readPolynomial(firstSummand);
