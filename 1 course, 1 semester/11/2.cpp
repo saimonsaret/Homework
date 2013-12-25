@@ -29,7 +29,7 @@ bool matchAutomate(char *line) {
 		switch (currentState) {
 			case numberSign:
 				if (line[i] == '+' || line[i] == '-' || isNumber(line[i])) {
-					currentState = numberSign;
+					currentState = integralPart;
 					i++;
 				}
 				else
