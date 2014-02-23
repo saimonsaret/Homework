@@ -66,8 +66,7 @@ class DoubleList : public SimpleList{
 
 	public:
 		DoubleList();
-		DoubleList* toDoubleList(SimpleList *list);
-		virtual DoubleListElement* getHead();
+		DoubleListElement* getHead();
 		void addElement(int number);
 		DoubleListElement *findPrevElement(int number);
 		void deleteElement(int number);
