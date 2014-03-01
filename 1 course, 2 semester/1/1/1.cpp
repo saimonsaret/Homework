@@ -9,6 +9,7 @@ int main()
 	list->addElement(5);
 	list->addElement(7);
 	list->deleteElement(7);
-	cout << list->getHead()->getNext()->getValue();
+	cout << list->getHead()->getNext()->getValue() << endl;
+	cout << list->getHead()->getNext()->getPrev()->getPrev();
 	delete list;
 }
