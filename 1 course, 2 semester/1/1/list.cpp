@@ -1,12 +1,6 @@
 #include "list.h"
 #include "listElement.h"
 
-
-
-/* List Interface */
-
-
-
 void List::setHead(ListElement *element) {
 	this->head = element;
 }
@@ -52,68 +46,4 @@ ListElement *List::findPrevElement(int number) {
 		return nullptr;
 	else
 		return currentElement;
-}
-
-
-
-/* SimpleList Interface */
-
-
-
-SimpleList::SimpleList() : List() {
-}
-
-SimpleList::~SimpleList() {
-}
-SimpleListElement* SimpleList::getHead() {
-	return SimpleListElement::toSimpleListElement(this->List::getHead());
-}
-
-void SimpleList::addElement(int number) {
-	SimpleListElement *newElement = new SimpleListElement(this->getHead(), number);
-}
-
-SimpleListElement* SimpleList::findPrevElement(int number) {
-	return SimpleListElement::toSimpleListElement(this->List::findPrevElement(number));
-}
-
-void SimpleList::deleteElement(int number) {
-	this->List::deleteElement(number);
-}
-
-
-
-/* DoubleList interface */
-
-
-
-DoubleList::DoubleList() {
-	delete this->getHead();
-	DoubleListElement *newElement = new DoubleListElement();
-	this->setHead(newElement);
-}
-
-DoubleList::~DoubleList() {
-}
-
-DoubleListElement* DoubleList::getHead() {
-	return DoubleListElement::toDoubleListElement(this->List::getHead());
-}
-
-void DoubleList::addElement(int number) {
-	DoubleListElement *newElement = new DoubleListElement(this->getHead(), number);
-}
-
-DoubleListElement* DoubleList::findPrevElement(int number) {
-	return DoubleListElement::toDoubleListElement(this->List::findPrevElement(number));
-}
-
-void DoubleList::deleteElement(int number) {
-	DoubleListElement *prevElement = this->findPrevElement(number);
-	if (prevElement->getNext() != nullptr) {
-		DoubleListElement *nextElement = prevElement->getNext()->getNext();
-		if (nextElement != nullptr)
-			nextElement->setPrev(prevElement);
-	}
-	this->List::deleteElement(number);
 }

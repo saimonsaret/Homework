@@ -1,5 +1,6 @@
 #include <iostream>
-#include "list.h"
+#include "simpleList.h"
+#include "doubleList.h"
 
 using namespace std;
 
@@ -10,6 +11,5 @@ int main()
 	list->addElement(7);
 	list->deleteElement(7);
 	cout << list->getHead()->getNext()->getValue() << endl;
-	cout << list->getHead()->getNext()->getPrev()->getPrev();
 	delete list;
 }
