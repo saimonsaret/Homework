@@ -2,7 +2,8 @@
 #include "stack.h"
 #include "stackElement.h"
 
-template <typename type> class PointerStack : public Stack <type> {
+template <typename type>
+class PointerStack : public Stack <type> {
 	public:
 		PointerStack() {
 			StackElement<type> *newElement = new StackElement<type>;

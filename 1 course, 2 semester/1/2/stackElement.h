@@ -1,6 +1,7 @@
 #pragma once
 
-template <typename type> class StackElement {
+template <typename type>
+class StackElement {
 	public:
 		StackElement() {
 			next = nullptr;
