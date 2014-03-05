@@ -1,6 +1,8 @@
 #pragma once
 #include "stack.h"
+#include "pointerStack.h"
+#include "arrayStack.h"
 
-Stack *turnToPrefixNotation(char *expression);
+PointerStack<char> *turnToPrefixNotation(char *expression);
 
 double calculateFromPrefixNotation(char *expression);

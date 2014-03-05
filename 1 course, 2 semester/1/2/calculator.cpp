@@ -1,6 +1,8 @@
 #include "calculator.h"
 #include <string.h>
 
+const int maxLength = 10000;
+
 bool isNumber(char symbol) {
 	return ((symbol >= '0') && (symbol <= '9'));
 }
@@ -21,36 +23,34 @@ int priority(char operation) {
 	return -1;
 }
 
-void freeStack(Stack *stack, Stack *answer, int operationPriority) {
-	while ((stack->getSize() > 0) && (priority(stack->getFirst()->getCharValue()) >= operationPriority)) {
-		if ((answer->getSize() > 0) && (answer->getFirst()->getCharValue() != ' ')) {
+void freeStack(ArrayStack<char, maxLength> *stack, PointerStack<char> *answer, int operationPriority) {
+	while ((stack->getSize() > 0) && (priority(stack->getFirst()) >= operationPriority)) {
+		if ((answer->getSize() > 0) && ((answer->getFirst()->value) != ' ')) {
 			answer->push(' ');
 		}
-		answer->push(stack->getFirst()->getCharValue());
+		answer->push(stack->getFirst());
 		stack->pop();
 	}
 
 	if (operationPriority == 1) 
 		stack->pop();
-	if ((answer->getSize() > 0) && (answer->getFirst()->getCharValue() != ' '))
+	if ((answer->getSize() > 0) && (answer->getFirst()->value != ' '))
 		answer->push(' ');
 }
 
-void calculate(char operation, Stack *stack) {
+void calculate(char operation, PointerStack<double> *stack) {
 
-	DoubleStackElement *currentElement = (DoubleStackElement*)stack->getFirst();
-	DoubleStackElement *nextElement = (DoubleStackElement*)currentElement->next;
-	double firstValue = nextElement->getDoubleValue();
-	double secondValue = currentElement->getDoubleValue();
+	StackElement<double> *currentElement = stack->getFirst();
+	StackElement<double> *nextElement = currentElement->next;
 
 	if (operation == '+') {
-		nextElement->setValue(firstValue + secondValue);
+		nextElement->value += currentElement->value;
 	} else if (operation == '-') {
-		nextElement->setValue(firstValue - secondValue);
+		nextElement->value -= currentElement->value;
 	} else if (operation == '*') {
-		nextElement->setValue(firstValue * secondValue);
+		nextElement->value *= currentElement->value;
 	} else if (operation == '/') {
-		nextElement->setValue(firstValue / secondValue);
+		nextElement->value /= currentElement->value;
 	} else {
 		return;
 	}
@@ -58,12 +58,12 @@ void calculate(char operation, Stack *stack) {
 	stack->pop();
 }
 
-Stack *turnToPrefixNotation(char *expression) {
+PointerStack<char> *turnToPrefixNotation(char *expression) {
 
 	int expressionLength = strlen(expression);
 
-	Stack *answer = new Stack(charStack);
-	Stack *operations = new Stack(charStack);
+	PointerStack<char> *answer = new PointerStack<char>;
+	ArrayStack<char, maxLength> *operations = new ArrayStack<char, maxLength>;
 
 	for (int i = 0; i < expressionLength; i++) {
 		if (isNumber(expression[i])) {
@@ -72,7 +72,7 @@ Stack *turnToPrefixNotation(char *expression) {
 
 		} else if (expression[i] == ' ') {
 
-			if ((answer->getSize() > 0) && (isNumber(answer->getFirst()->getCharValue())))
+			if ((answer->getSize() > 0) && (isNumber(answer->getFirst()->value)))
 				answer->push(expression[i]);
 
 		} else if (expression[i] == ')') {
@@ -101,16 +101,17 @@ Stack *turnToPrefixNotation(char *expression) {
 double calculateFromPrefixNotation(char *expression) {	
 
 	int expressionLength = strlen(expression);
-	Stack *stack = new Stack(doubleStack);
+	PointerStack<double> *stack = new PointerStack<double>;
 
 	for (int i = 0; i < expressionLength; i++) {
 		if (isNumber(expression[i])) {
 	
 			if ((i > 0) && (isNumber(expression[i - 1]))) {
-				DoubleStackElement *firstElement = (DoubleStackElement*)stack->getHead()->next;
-				firstElement->setValue(firstElement->getValue() * 10  + expression[i] - '0');
+				StackElement<double> *firstElement = stack->getFirst();
+				firstElement->value *= firstElement->value * 10;
+				firstElement->value += expression[i] - '0';
 			} else {
-				stack->push((double)(expression[i] - '0'));
+				stack->push(expression[i] - '0');
 			}
 
 		} else if (isOperation(expression[i])) {
@@ -118,7 +119,7 @@ double calculateFromPrefixNotation(char *expression) {
 		}
 	}
 
-	double answer = stack->getFirst()->getDoubleValue();
+	double answer = stack->getFirst()->value;
 
 	delete stack;
 

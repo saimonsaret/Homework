@@ -16,14 +16,14 @@ int main() {
 	memset(expression, 0, maxLength * sizeof(char));
 	fgets(expression, maxLength, stdin);
 
-	Stack *prefixStack = turnToPrefixNotation(expression);
+	PointerStack<char> *prefixStack = turnToPrefixNotation(expression);
 
 	int prefixExpressionLength = prefixStack->getSize();
 	char *prefixExpression = new char[prefixExpressionLength + 1];
 	memset(prefixExpression, 1, (prefixExpressionLength + 1) * sizeof(char));
 
 	for (int i = 0; i < prefixExpressionLength; i++) {
-		prefixExpression[prefixExpressionLength - i - 1] = prefixStack->getFirst()->getCharValue();
+		prefixExpression[prefixExpressionLength - i - 1] = prefixStack->getFirst()->value;
 		prefixStack->pop();
 	}
 
@@ -45,7 +45,6 @@ int main() {
 
 	delete[] expression;
 	delete[] prefixExpression;
-	delete prefixStack;
 
 	return 0;
 }

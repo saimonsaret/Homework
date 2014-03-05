@@ -1,23 +1,21 @@
 #pragma once
-#include "stackElement.h"
 
-enum StackTypes {
-	doubleStack = 0,
-	charStack = 1
-};
-
+template <typename type>
 class Stack {
 	public:
-		Stack(int type);
-		~Stack();
-		void push(double number);
-		void push(char symbol);
-		void pop();
-		int getSize();
-		StackElement *getFirst();
-		StackElement *getHead();
-	private:
-		StackElement *head;
-		int stackType;
+		Stack() {
+			size = 0;
+		}
+		virtual ~Stack() {
+		}
+		virtual void push(type value) {
+		}
+		virtual void pop() {
+		}
+		int getSize() {
+			return size;
+		}
+
+	protected:
 		int size;
 };
