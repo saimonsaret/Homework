@@ -4,6 +4,5 @@
 
 class Sorter {
 	public:
-		virtual void sort() {
-		}
+		virtual void sort(int data[], int size) = 0;
 };

@@ -1,5 +1,6 @@
 #include <iostream>
 #include "string.h"
+#include <stdio.h>
 #include "sorter.h"
 #include "bubbleSorter.h"
 #include "quickSorter.h"
