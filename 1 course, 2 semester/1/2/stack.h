@@ -8,10 +8,8 @@ class Stack {
 		}
 		virtual ~Stack() {
 		}
-		virtual void push(type value) {
-		}
-		virtual void pop() {
-		}
+		virtual void push(type value) = 0;
+		virtual void pop() = 0;
 		int getSize() {
 			return size;
 		}
