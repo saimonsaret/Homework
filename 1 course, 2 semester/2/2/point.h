@@ -2,6 +2,7 @@
 
 class Direction;
 
+///Class, which contains coordinates
 class Point {
 	public:
 		Point() {

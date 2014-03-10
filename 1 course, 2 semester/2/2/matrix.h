@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 
+///Template, which contains a matrix of neccesary type
 template<typename type>
 class Matrix {
 	public:

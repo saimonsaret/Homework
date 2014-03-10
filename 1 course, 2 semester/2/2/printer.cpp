@@ -5,6 +5,10 @@
 #include <string.h>
 #include <stdio.h>
 
+void Printer::printMatrix() {
+}
+
+///Operator+ overloading to sum points and directions
 Point operator+(Point coord, Direction dir) {
 	Point ans;
 	ans.x = coord.x + dir.dx;
@@ -12,6 +16,7 @@ Point operator+(Point coord, Direction dir) {
 	return ans;
 }
 
+///Method, which shows if there is a not visited point near current point
 bool canMove(Matrix<bool> *table, Point point) {
 
 	if (!table->matrix[point.x][point.y])

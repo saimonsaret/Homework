@@ -1,11 +1,13 @@
 #include "quickSort.h"
 #include <iostream>
 
+///Method to swap columns of matrix
 void swapColumns(Matrix<int> *table, int first, int second) {
 	for (int i = 0; i < table->matrixSize; i++)
 		std::swap(table->matrix[i][first], table->matrix[i][second]);
 }
 
+///Method to sort columns of submatrix by their first elements
 void sortSubsegment(Matrix<int> *table, int left, int right) {
 	int middle = table->matrix[0][(left + right) / 2];
 	int i = left;
