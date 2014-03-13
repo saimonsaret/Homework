@@ -24,7 +24,7 @@ class Calculator
 		void addDigit(QString newDigit);
 		void addPoint();
 		void addOperation(QString newOperation);
-		///De
+		///Deleting all the numbers and operations from calculator
 		void clear();
 		///Make the class ready for the next operation after calculation
 		void getReady();
