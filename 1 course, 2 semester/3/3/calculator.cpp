@@ -20,12 +20,16 @@ double Calculator::calculateAnswer() {
 }
 
 void Calculator::addDigit(QString newDigit) {
+
+	if (state == none || (state == showAnswer && operation == 0)) {
+			clear();
+			state = firstNumberInt;
+	}
+
 	QString *currentNumber = this->currentNumber();
 	currentNumber->append(newDigit);
 	if (state == firstNumberPoint)
 		state = firstNumberFraction;
-	else if (state == none || (state == showAnswer && operation == 0))
-		state = firstNumberInt;
 	else
 	if (state == secondNumberPoint)
 		state = secondNumberFraction;
