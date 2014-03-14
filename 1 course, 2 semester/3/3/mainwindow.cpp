@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	///Making signals for operations
 	QSignalMapper *operationMapper = new QSignalMapper;
-	connect(operationMapper, SIGNAL(mapped(QString)), this, SLOT(operationButtonClicked(QString)));
+	connect(operationMapper, SIGNAL(mapped(const QString &)), this, SLOT(operationButtonClicked(const QString &)));
 
 	for (int i = 0; i < 4; i++) {
 		QString *operation = new QString;
@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	///Making signals for digits
 	QSignalMapper *digitMapper = new QSignalMapper;
-	connect(digitMapper, SIGNAL(mapped(QString)), this, SLOT(digitButtonClicked(QString)));
+	connect(digitMapper, SIGNAL(mapped(const QString &)), this, SLOT(digitButtonClicked(const QString &)));
 
 	for (int i = 0; i < 10; i++) {
 		QPushButton *newDigitButton = new QPushButton(QString::number(i));
@@ -62,8 +62,6 @@ MainWindow::MainWindow(QWidget *parent) :
 		connect(newDigitButton, SIGNAL(clicked()), digitMapper, SLOT(map()));
 		digitMapper->setMapping(newDigitButton, QString::number(i));
 	}
-
-	this->calc.clear();
 
 }
 
@@ -87,11 +85,11 @@ void MainWindow::equalButtonClicked() {
 void MainWindow::pointButtonClicked() {
 	if (calc.state == firstNumberInt || calc.state == secondNumberInt) {
 		calc.addPoint();
-		ui->text->setText(*calc.currentNumber());
+		ui->text->setText(calc.currentNumber());
 	}
 }
 
-void MainWindow::operationButtonClicked(QString operation) {
+void MainWindow::operationButtonClicked(const QString &operation) {
 	if (calc.state == firstNumberInt || calc.state == firstNumberFraction || calc.state == mathOperation || calc.state == showAnswer) {
 		calc.addOperation(operation);
 	} else if (calc.state == secondNumberInt || calc.state == secondNumberFraction) {
@@ -101,12 +99,12 @@ void MainWindow::operationButtonClicked(QString operation) {
 	}
 }
 
-void MainWindow::digitButtonClicked(QString digit) {
+void MainWindow::digitButtonClicked(const QString &digit) {
 	calc.addDigit(digit);
-	ui->text->setText(*calc.currentNumber());
+	ui->text->setText(calc.currentNumber());
 }
 
 void MainWindow::clearButtonClicked() {
 	this->calc.clear();
-	ui->text->setText(*calc.currentNumber());
+	ui->text->setText(calc.currentNumber());
 }

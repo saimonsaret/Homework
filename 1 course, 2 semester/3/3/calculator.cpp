@@ -19,15 +19,15 @@ double Calculator::calculateAnswer() {
 		return (firstNumber.toDouble() / secondNumber.toDouble());
 }
 
-void Calculator::addDigit(QString newDigit) {
+void Calculator::addDigit(const QString &newDigit) {
 
 	if (state == none || (state == showAnswer && operation == 0)) {
 			clear();
 			state = firstNumberInt;
 	}
 
-	QString *currentNumber = this->currentNumber();
-	currentNumber->append(newDigit);
+	QString &currentNumber = this->currentNumber();
+	currentNumber.append(newDigit);
 	if (state == firstNumberPoint)
 		state = firstNumberFraction;
 	else
@@ -38,20 +38,20 @@ void Calculator::addDigit(QString newDigit) {
 }
 
 void Calculator::addPoint() {
-	QString *currentNumber = this->currentNumber();
-	currentNumber->append(".");
+	QString &currentNumber = this->currentNumber();
+	currentNumber.append(".");
 }
 
-void Calculator::addOperation(QString newOperation) {
+void Calculator::addOperation(const QString &newOperation) {
 	operation = newOperation.toStdString()[0];
 	state = mathOperation;
 }
 
-QString *Calculator::currentNumber() {
+QString &Calculator::currentNumber() {
 	if (state == none || state == firstNumberInt || state == firstNumberPoint || state == firstNumberFraction || (state == showAnswer && operation == 0))
-		return &firstNumber;
+		return firstNumber;
 	else
-		return &secondNumber;
+		return secondNumber;
 }
 
 void Calculator::clear() {

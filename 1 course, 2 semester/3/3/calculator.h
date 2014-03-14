@@ -21,15 +21,15 @@ class Calculator
 		///Watching if there is no division by zero
 		bool isAnswerCorrect();
 		double calculateAnswer();
-		void addDigit(QString newDigit);
+		void addDigit(const QString &newDigit);
 		void addPoint();
-		void addOperation(QString newOperation);
+		void addOperation(const QString &newOperation);
 		///Deleting all the numbers and operations from calculator
 		void clear();
 		///Make the class ready for the next operation after calculation
 		void getReady();
 		///Finds out, which number is currently inputing
-		QString *currentNumber();
+		QString &currentNumber();
 		int state;
 	private:
 		QString firstNumber;

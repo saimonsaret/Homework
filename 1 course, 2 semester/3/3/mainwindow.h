@@ -20,8 +20,8 @@ class MainWindow : public QMainWindow
 	private slots:
 		void equalButtonClicked();
 		void pointButtonClicked();
-		void operationButtonClicked(QString operation);
-		void digitButtonClicked(QString digit);
+		void operationButtonClicked(const QString &operation);
+		void digitButtonClicked(const QString &digit);
 		void clearButtonClicked();
 
 
