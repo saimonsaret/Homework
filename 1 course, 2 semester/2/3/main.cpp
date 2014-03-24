@@ -1,11 +1,16 @@
 #include <iostream>
 #include "matrix.h"
 #include "quickSort.h"
+#include "testSort.h"
 
 using namespace std;
 
 int main()
 {
+
+	TestSort test;
+	QTest::qExec(&test);
+
 	cout << "Enter size of table\n";
 	int size = 0;
 	cin >> size;

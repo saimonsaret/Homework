@@ -1,11 +1,16 @@
 #include <iostream>
 #include "simpleList.h"
 #include "doubleList.h"
+#include "testList.h"
 
 using namespace std;
 
 int main()
 {
+
+	TestList test;
+	QTest::qExec(&test);
+
 	DoubleList *list = new DoubleList;
 	list->addElement(5);
 	list->addElement(7);

@@ -1,17 +1,30 @@
-TEMPLATE = app
-CONFIG += console
-CONFIG -= app_bundle
-CONFIG -= qt
+#-------------------------------------------------
+#
+# Project created by QtCreator 2014-03-24T01:40:55
+#
+#-------------------------------------------------
 
-SOURCES += main.cpp \
-    printer.cpp \
-    direction.cpp
+QT       += core
+QT       += testlib
+QT       -= gui
+
+TARGET = Homework
+CONFIG   += console
+CONFIG   -= app_bundle
+
+TEMPLATE = app
+
+
+SOURCES += \
+    direction.cpp \
+    main.cpp \
+    printer.cpp
 
 HEADERS += \
-    printer.h \
     consolePrinter.h \
-    filePrinter.h \
     direction.h \
+    filePrinter.h \
+    matrix.h \
     point.h \
-    matrix.h
-
+    printer.h \
+    testPrinter.h

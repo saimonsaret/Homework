@@ -2,6 +2,7 @@
 #include "consolePrinter.h"
 #include "filePrinter.h"
 #include "matrix.h"
+#include "testPrinter.h"
 #include <cstdio>
 #include <iostream>
 #include <stdio.h>
@@ -20,6 +21,9 @@ enum printType {
 
 int main()
 {
+
+	TestPrinter test;
+	QTest::qExec(&test);
 
 	cout << "Enter size of table (odd number)\n";
 	int size = 0;

@@ -3,6 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include "calculator.h"
+#include "stackTest.h"
 
 using namespace std;
 
@@ -10,6 +11,9 @@ const int maxLength = 100000;
 const double eps = 1e-9;
 
 int main() {
+
+	StackTest test;
+	QTest::qExec(&test);
 
 	printf("Enter your expression:\n");
 	char *expression = new char[maxLength];

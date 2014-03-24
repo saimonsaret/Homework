@@ -4,6 +4,8 @@
 #include "sorter.h"
 #include "bubbleSorter.h"
 #include "quickSorter.h"
+#include "sorterTest.h"
+#include "sorterTest.h"
 
 using namespace std;
 
@@ -15,6 +17,9 @@ enum sortType {
 
 int main()
 {
+	SorterTest test;
+	QTest::qExec(&test);
+
 	cout << "Enter number of elements" << endl;
 	int size = 0;
 	cin >> size;
