@@ -8,6 +8,7 @@ class HashTable {
 		HashTable(int max, int base);
 		~HashTable();
 		void addToHashTable(ExpandingString *word);
+		///Finds current word in the hashtable and returns it's previous element in the record list
 		RecordListElement* findPrevInHashTable(ExpandingString *word);
 		bool deleteFromHashTable(ExpandingString *word);
 		void printWords();
@@ -18,6 +19,7 @@ class HashTable {
 		int maxHash;
 		int hashBase;
 		int countHash(ExpandingString *word);
+		///All characters are remaked in lower case
 		static void makeLowerCase(ExpandingString *word);
 };
 

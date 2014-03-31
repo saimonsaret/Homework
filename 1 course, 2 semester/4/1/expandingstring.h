@@ -10,7 +10,6 @@ class ExpandingString {
 		ExpandingString *cloneExpandingString();
 		bool equalExpandingString(ExpandingString *comparedString);
 		int lengthExpandingString();
-		ExpandingString *makeExpandingSubstring(int leftBorder, int rightBorder);
 		char *string;
 		int maxLength;
 		int currentLength;

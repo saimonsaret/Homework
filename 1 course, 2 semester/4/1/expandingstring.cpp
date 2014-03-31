@@ -76,11 +76,3 @@ bool ExpandingString::isEmptyExpandingString() {
 	return (currentLength == 0);
 }
 
-ExpandingString *ExpandingString::makeExpandingSubstring(int leftBorder, int rightBorder) {
-	ExpandingString *newString = new ExpandingString;
-	char *substring = new char[rightBorder - leftBorder + 2];
-	memset(substring, 0, (rightBorder - leftBorder + 2) * sizeof(char));
-	for (int i = leftBorder; i <= rightBorder; i++)
-		substring[i - leftBorder] = string[i];
-	return ExpandingString::conversionToExpandingString(substring);
-}
