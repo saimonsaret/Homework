@@ -20,28 +20,31 @@ class TestHashTable : public QObject {
 			delete table;
 		}
 		void testAdd() {
-			ExpandingString *line = ExpandingString::conversionToExpandingString("ololo");
+			ExpandingString *line = ExpandingString::conversionToExpandingString((char*)"ololo");
 			table->addToHashTable(line);
 			if (table->findPrevInHashTable(line) == nullptr)
 				QFAIL("Adding value is incorrect\n");
 		}
 		void testDelete() {
-			ExpandingString *line = ExpandingString::conversionToExpandingString("ololo");
+			ExpandingString *line = ExpandingString::conversionToExpandingString((char*)"ololo");
 			table->addToHashTable(line);
 			QVERIFY(table->deleteFromHashTable(line));
 		}
 		void testRemake() {
-			ExpandingString *line = ExpandingString::conversionToExpandingString("ololo");
+			ExpandingString *line = ExpandingString::conversionToExpandingString((char*)"ololo");
 			table->addToHashTable(line);
-			table = table->remakeTable(103, 29);
-			line = ExpandingString::conversionToExpandingString("ololo");
+
+			HashFunction testFunction(103, 29);
+			table->remakeTable(testFunction);
+
+			line = ExpandingString::conversionToExpandingString((char*)"ololo");
 			if (table->findPrevInHashTable(line) == nullptr)
 				QFAIL("Remaking hashtable is incorrect\n");
 			delete line;
 		}
 		void complexTest() {
-			ExpandingString *firstLine = ExpandingString::conversionToExpandingString("1");
-			ExpandingString *secondLine = ExpandingString::conversionToExpandingString("2");
+			ExpandingString *firstLine = ExpandingString::conversionToExpandingString((char*)"1");
+			ExpandingString *secondLine = ExpandingString::conversionToExpandingString((char*)"2");
 			table->addToHashTable(firstLine);
 			table->addToHashTable(secondLine);
 
@@ -51,24 +54,24 @@ class TestHashTable : public QObject {
 
 			QVERIFY(table->deleteFromHashTable(secondLine));
 
-			secondLine = ExpandingString::conversionToExpandingString("2");
+			secondLine = ExpandingString::conversionToExpandingString((char*)"2");
 
 			if (table->findPrevInHashTable(firstLine) == nullptr
 					|| table->findPrevInHashTable(secondLine) != nullptr)
 						QFAIL("Deleting is incorrect\n");
 
-			table = table->remakeTable(103, 29);
-			firstLine = ExpandingString::conversionToExpandingString("1");
+			HashFunction testFunction(103, 29);
+			table->remakeTable(testFunction);
+			firstLine = ExpandingString::conversionToExpandingString((char*)"1");
 
 			if (table->findPrevInHashTable(firstLine) == nullptr)
 							QFAIL("Remaking hashtable is incorrect\n");
 
-			ExpandingString *thirdLine = ExpandingString::conversionToExpandingString("3");
+			ExpandingString *thirdLine = ExpandingString::conversionToExpandingString((char*)"3");
 			table->addToHashTable(thirdLine);
 			if (table->findPrevInHashTable(thirdLine) == nullptr)
 				QFAIL("Adding in remaked table is incorrect");
 
-			QVERIFY(table->deleteFromHashTable(firstLine));
 			QVERIFY(table->deleteFromHashTable(thirdLine));
 			delete firstLine;
 			delete secondLine;

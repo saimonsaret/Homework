@@ -1,6 +1,7 @@
 #pragma once
 #include "recordlist.h"
 #include "expandingstring.h"
+#include "hashfunction.h"
 #include <iostream>
 
 class HashTable {
@@ -13,12 +14,11 @@ class HashTable {
 		bool deleteFromHashTable(ExpandingString *word);
 		void printWords();
 		void printStatistics();
-		HashTable *remakeTable(int max, int base);
+		void remakeTable(HashFunction newFunction);
 		RecordList **cell;
+
 	private:
-		int maxHash;
-		int hashBase;
-		int countHash(ExpandingString *word);
+		HashFunction *hashFunc;
 		///All characters are remaked in lower case
 		static void makeLowerCase(ExpandingString *word);
 };

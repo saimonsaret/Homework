@@ -7,6 +7,7 @@
 
 const int defaultMaxHash = 1003;
 const int defaultHashBase = 31;
+const char enter = 10;
 
 enum queries {
 	none = -1,
@@ -34,7 +35,7 @@ bool isLetter(char symbol) {
 
 void deleteEnter(char *line) {
 	int lineLength = strlen(line);
-	if (line[lineLength - 1] == 10)
+	if (line[lineLength - 1] == enter)
 		line[lineLength - 1] = 0;
 }
 
@@ -92,6 +93,7 @@ int main() {
 					cout << "Your value was successfully deleted\n";
 				else
 					cout << "There is no such value in the hashtable\n";
+				delete newString;
 				break;
 			}
 			case findValue: {
@@ -103,6 +105,7 @@ int main() {
 					cout << "There is such valie in the hashtable\n";
 				else
 					cout << "There is no such value in the hashtable\n";
+				delete newString;
 				break;
 			}
 			case showStats: {
@@ -111,14 +114,14 @@ int main() {
 			}
 			case chooseHashFunction: {
 				cout << "Enter hash module and hash base of new hashtable (natural numbers no more than 10000)\n";
-				int newMaxHash = 10001;
-				int newHashBase = 10001;
-				cin >> newMaxHash >> newHashBase;
-				while ((newMaxHash < 1 || newMaxHash > 10000) || (newHashBase < 1 || newHashBase > 10000)) {
-					cout << "Your numbers are not acceptable. Enter new ones\n";
-					cin >> newMaxHash >> newHashBase;
+				HashFunction newFunction(0, 0);
+				cin >> newFunction.maxHash >> newFunction.hashBase;
+				while ((newFunction.maxHash < 1 || newFunction.maxHash > 10000)
+					|| (newFunction.hashBase < 1 || newFunction.hashBase > 10000)) {
+						cout << "Your numbers are not acceptable. Enter new ones\n";
+						cin >> newFunction.maxHash >> newFunction.hashBase;
 				}
-				table = table->remakeTable(newMaxHash, newHashBase);
+				table->remakeTable(newFunction);
 				break;
 			}
 			case help: {

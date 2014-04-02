@@ -33,6 +33,7 @@ char *ExpandingString::cloneCharString(char *value, int newStringSize) {
 ExpandingString *ExpandingString::conversionToExpandingString(char *value) {
 	ExpandingString *newExpandingString = new ExpandingString;
 	int stringLength = strlen(value);
+	delete newExpandingString->string;
 	newExpandingString->string = cloneCharString(value, stringLength);
 	newExpandingString->maxLength = stringLength;
 	newExpandingString->currentLength = stringLength;
@@ -43,7 +44,7 @@ ExpandingString::~ExpandingString() {
 	delete[] string;
 }
 
-ExpandingString *ExpandingString::addToExpandingString(ExpandingString *addedString) {
+void ExpandingString::addToExpandingString(ExpandingString *addedString) {
 	while (currentLength + addedString->currentLength > maxLength)
 		this->expandString();
 	for (int i = 0; i < addedString->currentLength; i++)
@@ -53,6 +54,7 @@ ExpandingString *ExpandingString::addToExpandingString(ExpandingString *addedStr
 
 ExpandingString *ExpandingString::cloneExpandingString() {
 	ExpandingString *newString = new ExpandingString;
+	delete newString->string;
 	newString->string = cloneCharString(string, maxLength);
 	newString->currentLength = currentLength;
 	newString->maxLength = maxLength;

@@ -3,20 +3,10 @@
 
 HashTable::HashTable(int max, int base) {
 
-	maxHash = max;
-	hashBase = base;
-	cell = new RecordList*[maxHash];
-	for (int i = 0; i < maxHash; i++)
+	hashFunc = new HashFunction(max, base);
+	cell = new RecordList*[hashFunc->maxHash];
+	for (int i = 0; i < hashFunc->maxHash; i++)
 		cell[i] = new RecordList;
-}
-
-int HashTable::countHash(ExpandingString *word) {
-	int wordLength = strlen(word->string);
-	int currentHash = 0;
-	for (int i = 0; i < wordLength; i++) {
-		currentHash = ((currentHash * hashBase) + word->string[i]) % maxHash;
-	}
-	return currentHash;
 }
 
 void HashTable::makeLowerCase(ExpandingString *word) {
@@ -29,7 +19,7 @@ void HashTable::makeLowerCase(ExpandingString *word) {
 
 void HashTable::addToHashTable(ExpandingString *word) {
 	makeLowerCase(word);
-	int hash = this->countHash(word);
+	int hash = hashFunc->countHash(word);
 
 	if (strlen(word->string) != 0)
 		cell[hash]->addToRecordList(word);
@@ -39,12 +29,9 @@ void HashTable::addToHashTable(ExpandingString *word) {
 }
 
 RecordListElement* HashTable::findPrevInHashTable(ExpandingString *word) {
-	int hash = this->countHash(word);
+	int hash = hashFunc->countHash(word);
 	RecordListElement *ans = cell[hash]->recordFindPrevWord(word);
-	if (ans != nullptr)
-		return ans;
-	else
-		return nullptr;
+	return ans;
 }
 
 bool HashTable::deleteFromHashTable(ExpandingString *word) {
@@ -57,7 +44,7 @@ bool HashTable::deleteFromHashTable(ExpandingString *word) {
 
 void HashTable::printWords() {
 	printf("List of the words is (word, number of appearences):\n");
-	for (int i = 0; i < maxHash; i++) {
+	for (int i = 0; i < hashFunc->maxHash; i++) {
 		cell[i]->printRecordList();
 	}
 }
@@ -68,7 +55,7 @@ void HashTable::printStatistics() {
 	int maxID = -1;
 	int empty = 0;
 
-	for (int i = 0; i < maxHash; i++) {
+	for (int i = 0; i < hashFunc->maxHash; i++) {
 		int size = cell[i]->sizeRecordList();
 		number += size;
 		int length = cell[i]->lengthRecordList();
@@ -78,7 +65,7 @@ void HashTable::printStatistics() {
 		if (length == 0)
 			empty++;
 	}
-	printf("Load factor is: %.5f\n", (float)number / maxHash);
+	printf("Load factor is: %.5f\n", (float)number / hashFunc->maxHash);
 	printf("Max chain length is: %d. Number from this chain are:\n", maxLength);
 	cell[maxID]->printRecordList();
 	printf("Words added: %d\n", number);
@@ -86,26 +73,28 @@ void HashTable::printStatistics() {
 }
 
 HashTable::~HashTable() {
-	for (int i = 0; i < maxHash; i++) {
+	for (int i = 0; i < hashFunc->maxHash; i++) {
 		delete cell[i];
 	}
 	delete[] cell;
 }
 
-HashTable* HashTable::remakeTable(int max, int base) {
-	HashTable *newTable = new HashTable(max, base);
+void HashTable::remakeTable(HashFunction newFunction) {
 
-	for (int i = 0; i < maxHash; i++) {
+	RecordList **newCell = new RecordList*[hashFunc->maxHash];
+	for (int i = 0; i < hashFunc->maxHash; i++)
+		newCell[i] = new RecordList;
+
+	for (int i = 0; i < hashFunc->maxHash; i++) {
 		RecordListElement *element = this->cell[i]->head->next;
 		while (element != nullptr) {
 			ExpandingString *newString = element->word->cloneExpandingString();
-			newTable->addToHashTable(newString);
-			if (newTable->findPrevInHashTable(newString) == nullptr) {
-				std::cout << "HUJ";
-			}
+			newCell[newFunction.countHash(newString)]->addToRecordList(newString);
 			element = element->next;
 		}
 	}
-	delete this;
-	return newTable;
+	this->hashFunc->maxHash = newFunction.maxHash;
+	this->hashFunc->hashBase = newFunction.hashBase;
+	delete this->cell;
+	this->cell = newCell;
 }

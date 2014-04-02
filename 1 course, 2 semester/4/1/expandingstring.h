@@ -5,7 +5,7 @@ class ExpandingString {
 
 		ExpandingString();
 		~ExpandingString();
-		ExpandingString *addToExpandingString(ExpandingString *addedString);
+		void addToExpandingString(ExpandingString *addedString);
 		static ExpandingString *conversionToExpandingString(char *value);
 		ExpandingString *cloneExpandingString();
 		bool equalExpandingString(ExpandingString *comparedString);
