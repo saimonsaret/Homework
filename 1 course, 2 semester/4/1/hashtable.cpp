@@ -1,7 +1,7 @@
 #include "hashtable.h"
 #include <string.h>
 
-HashTable::HashTable(int max, int base) {
+HashTable::HashTable (int max, int base) {
 
 	hashFunc = new HashFunction(max, base);
 	cell = new RecordList*[hashFunc->maxHash];
@@ -79,7 +79,7 @@ HashTable::~HashTable() {
 	delete[] cell;
 }
 
-void HashTable::remakeTable(HashFunction newFunction) {
+void HashTable::remakeTable(HashFunction &newFunction) {
 
 	RecordList **newCell = new RecordList*[hashFunc->maxHash];
 	for (int i = 0; i < hashFunc->maxHash; i++)
@@ -89,12 +89,12 @@ void HashTable::remakeTable(HashFunction newFunction) {
 		RecordListElement *element = this->cell[i]->head->next;
 		while (element != nullptr) {
 			ExpandingString *newString = element->word->cloneExpandingString();
-			newCell[newFunction.countHash(newString)]->addToRecordList(newString);
+			int newHash = newFunction.countHash(newString);
+			newCell[newHash]->addToRecordList(newString);
 			element = element->next;
 		}
 	}
-	this->hashFunc->maxHash = newFunction.maxHash;
-	this->hashFunc->hashBase = newFunction.hashBase;
-	delete this->cell;
+	*this->hashFunc = newFunction;
+	delete[] this->cell;
 	this->cell = newCell;
 }

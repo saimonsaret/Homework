@@ -30,6 +30,12 @@ class TestSet : public QObject {
 			firstTestSet->deleteElement(5);
 			QVERIFY(!firstTestSet->findElement(5));
 		}
+		void testSameElements() {
+			firstTestSet->addElement(5);
+			firstTestSet->addElement(5);
+			QCOMPARE(firstTestSet->size(), 1);
+		}
+
 		void testIntersection() {
 			firstTestSet->addElement(1);
 			firstTestSet->addElement(3);

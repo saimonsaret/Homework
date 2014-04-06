@@ -14,7 +14,7 @@ class HashTable {
 		bool deleteFromHashTable(ExpandingString *word);
 		void printWords();
 		void printStatistics();
-		void remakeTable(HashFunction newFunction);
+		void remakeTable(HashFunction &newFunction);
 		RecordList **cell;
 
 	private:
