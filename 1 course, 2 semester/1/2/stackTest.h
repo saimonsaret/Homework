@@ -15,11 +15,11 @@ class StackTest : public QObject {
 	   explicit StackTest(QObject *parent = 0) : QObject(parent) {}
 
 	private slots:
-		void initTestCase() {
+		void init() {
 			pStack = new PointerStack<int>;
 			arrStack = new ArrayStack<int, maxSize>;
 		}
-		void cleanupTestCase() {
+		void cleanup() {
 			delete pStack;
 			delete arrStack;
 		}
@@ -38,12 +38,45 @@ class StackTest : public QObject {
 			QVERIFY(arrStack->getFirst() == 1);
 		}
 		void testPointerStackPop() {
+			pStack->push(1);
 			pStack->pop();
 			QVERIFY(pStack->getSize() == 0);
 		}
 		void testArrayStackPop() {
+			arrStack->push(1);
 			arrStack->pop();
 			QVERIFY(arrStack->getSize() == 0);
+		}
+		void complexTest() {
+			pStack->push(1);
+			pStack->push(3);
+			pStack->push(2);
+			QCOMPARE(pStack->getSize(), 3);
+			QCOMPARE(pStack->getFirst()->value, 2);
+			pStack->pop();
+			QCOMPARE(pStack->getFirst()->value, 3);
+			pStack->pop();
+			pStack->push(5);
+			QCOMPARE(pStack->getFirst()->value, 5);
+			pStack->pop();
+			QCOMPARE(pStack->getFirst()->value, 1);
+			pStack->pop();
+			QCOMPARE(pStack->getSize(), 0);
+
+			arrStack->push(1);
+			arrStack->push(3);
+			arrStack->push(2);
+			QCOMPARE(arrStack->getSize(), 3);
+			QCOMPARE(arrStack->getFirst(), 2);
+			arrStack->pop();
+			QCOMPARE(arrStack->getFirst(), 3);
+			arrStack->pop();
+			arrStack->push(5);
+			QCOMPARE(arrStack->getFirst(), 5);
+			arrStack->pop();
+			QCOMPARE(arrStack->getFirst(), 1);
+			arrStack->pop();
+			QCOMPARE(arrStack->getSize(), 0);
 		}
 
 	private:

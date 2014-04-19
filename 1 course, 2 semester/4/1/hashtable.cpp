@@ -95,6 +95,8 @@ void HashTable::remakeTable(HashFunction &newFunction) {
 		}
 	}
 	*this->hashFunc = newFunction;
-	delete[] this->cell;
+	for (int i = 0; i < this->hashFunc->maxHash; i++)
+		delete cell[i];
+	delete[] cell;
 	this->cell = newCell;
 }

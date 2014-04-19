@@ -13,30 +13,31 @@ class SorterTest : public QObject {
 	   explicit SorterTest(QObject *parent = 0) : QObject(parent) {}
 
 	private slots:
-		void initTestCase() {
+		void init() {
 			bSorter = new BubbleSorter;
 			qSorter = new QuickSorter;
+
+			numbers[0] = 4;
+			numbers[1] = 2;
+			numbers[2] = 5;
+			numbers[3] = 1;
+			numbers[4] = 3;
+
 		}
-		void cleanupTestCase() {
+		void cleanup() {
 			delete bSorter;
 			delete qSorter;
 		}
 
-		void init() {
-			numbers[0] = 5;
-			numbers[1] = 3;
-			numbers[2] = 8;
-			numbers[3] = 1;
-			numbers[4] = 4;
-		}
-
 		void testBubbleSorter() {
 			bSorter->sort(numbers, 5);
-			QVERIFY(numbers[0] == 1 && numbers[1] == 3 && numbers[2] == 4 && numbers[3] == 5 && numbers[4] == 8);
+			for (int i = 0; i < 5; i++)
+				QCOMPARE(numbers[i], i + 1);
 		}
 		void testQuickSorter() {
 			qSorter->sort(numbers, 5);
-			QVERIFY(numbers[0] == 1 && numbers[1] == 3 && numbers[2] == 4 && numbers[3] == 5 && numbers[4] == 8);
+			for (int i = 0; i < 5; i++)
+				QCOMPARE(numbers[i], i + 1)
 		}
 	private:
 		BubbleSorter *bSorter;

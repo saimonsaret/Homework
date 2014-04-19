@@ -11,11 +11,11 @@ class TestList : public QObject {
 		explicit TestList(QObject *parent = 0) : QObject(parent) {}
 
 	private slots:
-		void initTestCase() {
+		void init() {
 			sList = new SimpleList;
 			dList = new DoubleList;
 		}
-		void cleanupTestCase() {
+		void cleanup() {
 			delete sList;
 			delete dList;
 		}
@@ -27,18 +27,37 @@ class TestList : public QObject {
 		}
 		void testSimpleListAdd() {
 			sList->addElement(5);
-			QVERIFY(sList->getHead()->getNext()->getValue() == 5);
+			QCOMPARE(sList->getHead()->getNext()->getValue(), 5);
 		}
 		void testDoubleListAdd() {
 			dList->addElement(5);
-			QVERIFY(dList->getHead()->getNext()->getValue() == 5);
+			QCOMPARE(dList->getHead()->getNext()->getValue(), 5);
 		}
 		void testSimpleListDelete() {
+			sList->addElement(5);
 			sList->deleteElement(5);
 			QVERIFY(sList->getHead()->getNext() == nullptr);
 		}
 		void testDoubleListDelete() {
+			dList->addElement(5);
 			dList->deleteElement(5);
+			QVERIFY(dList->getHead()->getNext() == nullptr);
+		}
+		void complexTest() {
+			sList->addElement(3);
+			sList->addElement(5);
+			sList->deleteElement(5);
+			sList->addElement(7);
+			sList->deleteElement(3);
+			QCOMPARE(sList->getHead()->getNext()->getValue(), 7);
+			sList->deleteElement(7);
+			QVERIFY(sList->getHead()->getNext() == nullptr);
+
+			dList->addElement(1);
+			dList->addElement(9);
+			dList->deleteElement(9);
+			QCOMPARE(dList->getHead()->getNext()->getValue(), 1);
+			dList->deleteElement(1);
 			QVERIFY(dList->getHead()->getNext() == nullptr);
 		}
 

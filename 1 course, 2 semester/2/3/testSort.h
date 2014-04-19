@@ -10,23 +10,23 @@ class TestSort : public QObject {
 		explicit TestSort(QObject *parent = 0) : QObject(parent) {}
 
 	private slots:
-		void initTestCase() {
+		void init() {
 			table = new Matrix<int>(3);
-			for (int i = 0; i < 3; i++)
-				for (int j = 0; j < 3; j++)
-					table->matrix[i][j] = i * 3 + (2 - j);
 		}
-		void cleanupTestCase() {
+		void cleanup() {
 			delete table;
 		}
 		void testSort() {
+
+			for (int i = 0; i < 3; i++)
+				for (int j = 0; j < 3; j++)
+					table->matrix[i][j] = i * 3 + (2 - j);
+
 			sortColumns(table);
-			bool flag = true;
 			for (int i = 0; i < 3; i++)
 				for (int j = 0; j < 3; j++)
 					if (table->matrix[i][j] != i * 3 + j)
-						flag = false;
-			QVERIFY(flag);
+						QFAIL("Sorting matrix is not correct");
 		}
 	private:
 		Matrix<int> *table;
