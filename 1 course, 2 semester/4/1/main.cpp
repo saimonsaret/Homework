@@ -114,12 +114,12 @@ int main() {
 			}
 			case chooseHashFunction: {
 				cout << "Enter hash module and hash base of new hashtable (natural numbers no more than 10000)\n";
-				HashFunction newFunction(0, 0);
-				cin >> newFunction.maxHash >> newFunction.hashBase;
-				while ((newFunction.maxHash < 1 || newFunction.maxHash > 10000)
-					|| (newFunction.hashBase < 1 || newFunction.hashBase > 10000)) {
+				HashFunction *newFunction = new HashFunction(0, 0);
+				cin >> newFunction->maxHash >> newFunction->hashBase;
+				while ((newFunction->maxHash < 1 || newFunction->maxHash > 10000)
+					|| (newFunction->hashBase < 1 || newFunction->hashBase > 10000)) {
 						cout << "Your numbers are not acceptable. Enter new ones\n";
-						cin >> newFunction.maxHash >> newFunction.hashBase;
+						cin >> newFunction->maxHash >> newFunction->hashBase;
 				}
 				table->remakeTable(newFunction);
 				break;

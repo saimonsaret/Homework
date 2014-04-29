@@ -34,7 +34,7 @@ class TestHashTable : public QObject {
 			ExpandingString *line = ExpandingString::conversionToExpandingString((char*)"ololo");
 			table->addToHashTable(line);
 
-			HashFunction testFunction(103, 29);
+			HashFunction *testFunction = new HashFunction(103, 29);
 			table->remakeTable(testFunction);
 
 			line = ExpandingString::conversionToExpandingString((char*)"ololo");
@@ -60,7 +60,7 @@ class TestHashTable : public QObject {
 					|| table->findPrevInHashTable(secondLine) != nullptr)
 						QFAIL("Deleting is incorrect\n");
 
-			HashFunction testFunction(103, 29);
+			HashFunction *testFunction = new HashFunction(103, 29);
 			table->remakeTable(testFunction);
 			firstLine = ExpandingString::conversionToExpandingString((char*)"1");
 

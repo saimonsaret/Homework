@@ -79,7 +79,7 @@ HashTable::~HashTable() {
 	delete[] cell;
 }
 
-void HashTable::remakeTable(HashFunction &newFunction) {
+void HashTable::remakeTable(HashFunction *newFunction) {
 
 	RecordList **newCell = new RecordList*[hashFunc->maxHash];
 	for (int i = 0; i < hashFunc->maxHash; i++)
@@ -89,14 +89,17 @@ void HashTable::remakeTable(HashFunction &newFunction) {
 		RecordListElement *element = this->cell[i]->head->next;
 		while (element != nullptr) {
 			ExpandingString *newString = element->word->cloneExpandingString();
-			int newHash = newFunction.countHash(newString);
+			int newHash = newFunction->countHash(newString);
 			newCell[newHash]->addToRecordList(newString);
 			element = element->next;
 		}
 	}
-	*this->hashFunc = newFunction;
+
 	for (int i = 0; i < this->hashFunc->maxHash; i++)
 		delete cell[i];
 	delete[] cell;
+
+	delete this->hashFunc;
+	this->hashFunc = newFunction;
 	this->cell = newCell;
 }
