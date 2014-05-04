@@ -81,8 +81,8 @@ HashTable::~HashTable() {
 
 void HashTable::remakeTable(HashFunction *newFunction) {
 
-	RecordList **newCell = new RecordList*[hashFunc->maxHash];
-	for (int i = 0; i < hashFunc->maxHash; i++)
+	RecordList **newCell = new RecordList*[newFunction->maxHash];
+	for (int i = 0; i < newFunction->maxHash; i++)
 		newCell[i] = new RecordList;
 
 	for (int i = 0; i < hashFunc->maxHash; i++) {
