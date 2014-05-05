@@ -23,6 +23,9 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
 	delete ui;
+	delete fieldMapper;
+	delete coordinates;
+	delete currentGame;
 }
 
 void MainWindow::newGame() {
@@ -64,34 +67,18 @@ void MainWindow::newGame() {
 
 void MainWindow::gameMove(QWidget* cell) {
 
-	if (currentGame->isEnded)
-		return;
-
-	if (!coordinates->contains(cell))
-		return;
-
-	std::pair<int, int> coord = coordinates->take(cell);
-	QPushButton *button = dynamic_cast<QPushButton*>(cell);
-
-	///Verifying if move is valid
-	if (currentGame->field[coord.first][coord.second] == Game::noPlayer) {
-		if (currentGame->moveCount % 2 == 0) {
-			button->setText("X");
-			currentGame->field[coord.first][coord.second] = Game::firstPlayer;
-		} else {
-			button->setText("O");
-			currentGame->field[coord.first][coord.second] = Game::secondPlayer;
-		}
-		currentGame->moveCount++;
-	}
+	GameProcess::gameMove(currentGame, coordinates, cell);
 
 	int winner = currentGame->getWinner();
 	if (winner != Game::noPlayer) {
 		if (winner == Game::firstPlayer)
 			ui->statusText->setText("Tic win!");
-		else
+		else if (winner == Game::secondPlayer)
 			ui->statusText->setText("Toe win!");
+		else
+			ui->statusText->setText("Draw!");
 	}
+
 }
 
 void MainWindow::correctRules() {

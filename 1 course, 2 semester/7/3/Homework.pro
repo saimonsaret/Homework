@@ -17,6 +17,7 @@ SOURCES += main.cpp\
         mainwindow.cpp
 
 HEADERS  += mainwindow.h \
-    game.h
+    game.h \
+    gameprocess.h
 
 FORMS    += mainwindow.ui

@@ -25,7 +25,8 @@ class Game {
 		enum players {
 			noPlayer = 0,
 			firstPlayer = 1,
-			secondPlayer = 2
+			secondPlayer = 2,
+			draw = 3
 		};
 
 		int getWinner() {
@@ -89,7 +90,10 @@ class Game {
 						}
 					}
 				}
-			return noPlayer;
+			if (moveCount == fieldHeight * fieldWidth)
+				return draw;
+			else
+				return noPlayer;
 		}
 
 		int fieldWidth;

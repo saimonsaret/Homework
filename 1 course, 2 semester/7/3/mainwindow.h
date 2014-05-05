@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 #include <QMainWindow>
 #include "game.h"
+#include "gameprocess.h"
 #include "qsignalmapper.h"
 #include <QMap>
 #include "ui_mainwindow.h"
