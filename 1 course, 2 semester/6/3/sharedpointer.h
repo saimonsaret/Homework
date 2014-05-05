@@ -19,16 +19,18 @@ class SharedPointer{
 		}
 		~SharedPointer() {
 			data->count--;
-			if (data->count <= 0) {
+			if (data->count <= 0)
 				delete data;
-			}
 		}
 		SharedPointer &operator=(SharedPointer const &pointer) {
 			data->count--;
+			if (data->count == 0)
+				delete data;
 			data = pointer.data;
 			data->count++;
 			return *this;
 		}
+
 		type* get() {
 			return data->value;
 		}
@@ -41,6 +43,9 @@ class SharedPointer{
 		struct Data {
 			type* value;
 			int count;
+			~Data() {
+				delete value;
+			}
 		};
 		Data* data;
 };
