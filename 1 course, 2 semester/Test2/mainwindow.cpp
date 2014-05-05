@@ -29,8 +29,11 @@ void MainWindow::newGame() {
 	if (currentGame != nullptr) {
 
 		for (int i = 0; i < currentGame->fieldSize; i++)
-			for (int j = 0; j < currentGame->fieldSize; j++)
-				delete ui->buttonLayout->itemAtPosition(i, j)->widget();
+			for (int j = 0; j < currentGame->fieldSize; j++) {
+				QWidget *toDelete = ui->buttonLayout->itemAtPosition(i, j)->widget();
+				ui->buttonLayout->removeWidget(toDelete);
+				delete toDelete;
+			}
 
 		delete fieldMapper;
 		delete coordinates;
