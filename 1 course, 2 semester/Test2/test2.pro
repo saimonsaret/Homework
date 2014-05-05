@@ -13,7 +13,8 @@ TEMPLATE = app
 CONFIG += c++11
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    gameprocess.cpp
 
 HEADERS  += mainwindow.h \
     game.h \
