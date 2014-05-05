@@ -77,6 +77,7 @@ HashTable::~HashTable() {
 		delete cell[i];
 	}
 	delete[] cell;
+	delete hashFunc;
 }
 
 void HashTable::remakeTable(HashFunction *newFunction) {
