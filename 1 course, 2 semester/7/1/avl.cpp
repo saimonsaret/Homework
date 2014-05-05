@@ -8,20 +8,20 @@ AVLTree::AVLTree() {
 	root->value = maxInt;
 }
 
-void AVLTree::updateHeight(AVLNode *currentNode) {
-	if (currentNode == nullptr)
+void AVLTree::AVLNode::updateHeight() {
+	if (this == nullptr)
 		return;
 
 	int leftHeight = 0;
-	if (currentNode->left != nullptr)
-		leftHeight = currentNode->left->height;
+	if (left != nullptr)
+		leftHeight = left->height;
 	int rightHeight = 0;
-	if (currentNode->right != nullptr)
-		rightHeight = currentNode->right->height;
-	currentNode->height = std::max(leftHeight, rightHeight) + 1;
+	if (right != nullptr)
+		rightHeight = right->height;
+	height = std::max(leftHeight, rightHeight) + 1;
 }
 
-void AVLTree::updateParent(int value, AVLNode *parent, AVLNode *newNode) {
+void AVLTree::AVLNode::updateParent(int value, AVLNode *parent, AVLNode *newNode) {
 	if (parent->value > value)
 		parent->left = newNode;
 	else
@@ -30,20 +30,20 @@ void AVLTree::updateParent(int value, AVLNode *parent, AVLNode *newNode) {
 		newNode->parent = parent;
 }
 
-int AVLTree::findBalance(AVLNode *currentNode) {
-	if (currentNode == nullptr)
+int AVLTree::AVLNode::findBalance() {
+	if (this == nullptr)
 		return 0;
 
 	int leftHeight = 0;
-	if (currentNode->left != nullptr)
-		leftHeight = currentNode->left->height;
+	if (left != nullptr)
+		leftHeight = left->height;
 	int rightHeight = 0;
-	if (currentNode->right != nullptr)
-		rightHeight = currentNode->right->height;
+	if (right != nullptr)
+		rightHeight = right->height;
 	return leftHeight - rightHeight;
 }
 
-AVLNode* AVLTree::rightRotation(AVLNode *root) {
+AVLTree::AVLNode* AVLTree::rightRotation(AVLNode *root) {
 	AVLNode *tempNode = root->left;
 	tempNode->parent = root->parent;
 	root->parent = tempNode;
@@ -51,12 +51,12 @@ AVLNode* AVLTree::rightRotation(AVLNode *root) {
 	if (tempNode->right != nullptr)
 		tempNode->right->parent = root;
 	tempNode->right = root;
-	updateHeight(root);
-	updateHeight(tempNode);
+	root->updateHeight();
+	tempNode->updateHeight();
 	return tempNode;
 }
 
-AVLNode* AVLTree::leftRotation(AVLNode *root) {
+AVLTree::AVLNode* AVLTree::leftRotation(AVLNode *root) {
 	AVLNode *tempNode = root->right;
 	tempNode->parent = root->parent;
 	root->parent = tempNode;
@@ -64,25 +64,25 @@ AVLNode* AVLTree::leftRotation(AVLNode *root) {
 	if (tempNode->left != nullptr)
 		tempNode->left->parent = root;
 	tempNode->left = root;
-	updateHeight(root);
-	updateHeight(tempNode);
+	root->updateHeight();
+	tempNode->updateHeight();
 	return tempNode;
 }
 
 
-AVLNode* AVLTree::balanceNode(AVLNode *currentNode) {
+AVLTree::AVLNode* AVLTree::balanceNode(AVLNode *currentNode) {
 
 	if (currentNode == nullptr)
 		return nullptr;
 	
-	updateHeight(currentNode);
-	int balance = findBalance(currentNode);
+	currentNode->updateHeight();
+	int balance = currentNode->findBalance();
 	if (balance == -2) {
-		if (findBalance(currentNode->right) > 0)
+		if (currentNode->right->findBalance() > 0)
 			currentNode->right = rightRotation(currentNode->right);
 		return leftRotation(currentNode);
 	} else if (balance == 2) {
-		if (findBalance(currentNode->left) < 0)
+		if (currentNode->left->findBalance() < 0)
 			currentNode->left = leftRotation(currentNode->left);
 		return rightRotation(currentNode);
 	}
@@ -90,16 +90,16 @@ AVLNode* AVLTree::balanceNode(AVLNode *currentNode) {
 }
 
 void AVLTree::tryToBalance(AVLNode *currentNode) {
-	updateHeight(currentNode);
+	currentNode->updateHeight();
 	AVLNode tempNode = *currentNode;
 	AVLNode *newNode = balanceNode(currentNode);
-	updateParent(tempNode.value, tempNode.parent, newNode);
+	AVLNode::updateParent(tempNode.value, tempNode.parent, newNode);
 }
 
 
-AVLNode* AVLTree::findAndDeleteMinNode(AVLNode *currentNode) {
+AVLTree::AVLNode* AVLTree::findAndDeleteMinNode(AVLNode *currentNode) {
 	if (currentNode->left == nullptr) {
-		updateParent(currentNode->value, currentNode->parent, currentNode->right);
+		AVLNode::updateParent(currentNode->value, currentNode->parent, currentNode->right);
 		return currentNode;
 	}
 	AVLNode *minNode = findAndDeleteMinNode(currentNode->left);
@@ -108,34 +108,34 @@ AVLNode* AVLTree::findAndDeleteMinNode(AVLNode *currentNode) {
 }
 
 
-void AVLTree::removeNode(AVLNode *currentNode) {
+void AVLTree::AVLNode::remove() {
 
-	if ((currentNode->left == nullptr) && (currentNode->right == nullptr))
-		updateParent(currentNode->value, currentNode->parent, nullptr);
-	else if (currentNode->left == nullptr)
-		updateParent(currentNode->value, currentNode->parent, currentNode->right);
-	else if (currentNode->right == nullptr)
-		updateParent(currentNode->value, currentNode->parent, currentNode->left);
+	if ((left == nullptr) && (right == nullptr))
+		updateParent(value, parent, nullptr);
+	else if (left == nullptr)
+		updateParent(value, parent, right);
+	else if (right == nullptr)
+		updateParent(value, parent, left);
 	else {
-		AVLNode *minNode = findAndDeleteMinNode(currentNode->right);
-		minNode->left = currentNode->left;
-		minNode->right = currentNode->right;
-		if (currentNode->left != nullptr)
-			currentNode->left->parent = minNode;
-		if (currentNode->right != nullptr)
-			currentNode->right->parent = minNode;
-		updateParent(currentNode->value, currentNode->parent, minNode);
-		updateHeight(minNode);
+		AVLNode *minNode = findAndDeleteMinNode(right);
+		minNode->left = left;
+		minNode->right = right;
+		if (left != nullptr)
+			left->parent = minNode;
+		if (right != nullptr)
+			right->parent = minNode;
+		updateParent(value, parent, minNode);
+		minNode->updateHeight();
 		balanceNode(minNode);
 	}
-	delete currentNode;
+	delete this;
 }
 
 void AVLTree::addSubtreeValue(AVLNode *currentNode, AVLNode *parent, int value) {
 	if (currentNode == nullptr) {
 		AVLNode *newNode = new AVLNode(parent);
 		newNode->value = value;
-		updateParent(value, parent, newNode);
+		AVLNode::updateParent(value, parent, newNode);
 		newNode->height = 1;
 		newNode->count = 1;
 		return;
@@ -167,7 +167,7 @@ void AVLTree::deleteSubtreeValue(AVLNode *currentNode, int value) {
 		if (currentNode->count > 1) {
 			currentNode->count--;
 		} else {
-			removeNode(currentNode);
+			currentNode->remove();
 			return;
 		}
 	}
