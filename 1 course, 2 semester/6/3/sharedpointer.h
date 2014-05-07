@@ -3,34 +3,12 @@
 template <typename type>
 class SharedPointer{
 	public:
-		SharedPointer() {
-			data = new Data;
-			data->count = 0;
-			data->value = nullptr;
-		}
-		SharedPointer(type *pointer) {
-			data = new Data;
-			data->count = 1;
-			data->value = pointer;
-		}
-		SharedPointer(SharedPointer const &pointer) {
-			data = pointer.data;
-			data->count++;
-		}
-		~SharedPointer() {
-			data->count--;
-			if (data->count <= 0)
-				delete data;
-		}
-		SharedPointer &operator=(SharedPointer const &pointer) {
-			data->count--;
-			if (data->count == 0)
-				delete data;
-			data = pointer.data;
-			data->count++;
-			return *this;
-		}
-
+		SharedPointer();
+		SharedPointer(type *pointer);
+		///Copy constructor
+		SharedPointer(SharedPointer const &pointer);
+		~SharedPointer();
+		SharedPointer &operator=(SharedPointer const &pointer);
 		type* get() {
 			return data->value;
 		}
@@ -49,3 +27,40 @@ class SharedPointer{
 		};
 		Data* data;
 };
+
+template<typename type>
+SharedPointer<type>::SharedPointer() {
+	data = new Data;
+	data->count = 0;
+	data->value = nullptr;
+}
+
+template<typename type>
+SharedPointer<type>::SharedPointer(type *pointer) {
+	data = new Data;
+	data->count = 1;
+	data->value = pointer;
+}
+
+template<typename type>
+SharedPointer<type>::SharedPointer(SharedPointer const &pointer) {
+	data = pointer.data;
+	data->count++;
+}
+
+template <typename type>
+SharedPointer<type>::~SharedPointer() {
+	data->count--;
+	if (data->count <= 0)
+		delete data;
+}
+
+template <typename type>
+SharedPointer<type>& SharedPointer<type>::operator=(SharedPointer const &pointer) {
+	data->count--;
+	if (data->count == 0)
+		delete data;
+	data = pointer.data;
+	data->count++;
+	return *this;
+}
