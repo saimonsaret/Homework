@@ -6,8 +6,8 @@ class Vector {
 		Vector();
 		Vector(const double input[dimension]);
 		Vector(Vector<dimension> const &vect);
-		Vector<dimension> &operator+(Vector<dimension> const &vect);
-		Vector<dimension> &operator-(Vector<dimension> const &vect);
+		Vector<dimension> operator+(Vector<dimension> const &vect);
+		Vector<dimension> operator-(Vector<dimension> const &vect);
 		bool operator==(Vector<dimension> const &vect) const;
 
 		static double scalarMult(Vector<dimension> const &first, Vector<dimension> const &second);
@@ -49,19 +49,19 @@ Vector<dimension>::Vector(Vector<dimension> const &vect) {
 }
 
 template<int dimension>
-Vector<dimension>& Vector<dimension>::operator+(Vector<dimension> const &vect) {
-	Vector<dimension> *newVect = new Vector<dimension>;
+Vector<dimension> Vector<dimension>::operator+(Vector<dimension> const &vect) {
+	Vector<dimension> newVect;
 	for (int i = 0; i < dimension; i++)
-		newVect->coordinates[i] = this->coordinates[i] + vect.coordinates[i];
-	return *newVect;
+		newVect.coordinates[i] = this->coordinates[i] + vect.coordinates[i];
+	return newVect;
 }
 
 template<int dimension>
-Vector<dimension>& Vector<dimension>::operator-(Vector<dimension> const &vect) {
-	Vector<dimension> *newVect = new Vector<dimension>;
+Vector<dimension> Vector<dimension>::operator-(Vector<dimension> const &vect) {
+	Vector<dimension> newVect;
 	for (int i = 0; i < dimension; i++)
-		newVect->coordinates[i] = this->coordinates[i] - vect.coordinates[i];
-	return *newVect;
+		newVect.coordinates[i] = this->coordinates[i] - vect.coordinates[i];
+	return newVect;
 }
 
 template<int dimension>
