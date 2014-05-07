@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += testlib
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,10 +15,13 @@ CONFIG += c++11
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    gameprocess.cpp \
+    game.cpp
 
 HEADERS  += mainwindow.h \
     game.h \
-    gameprocess.h
+    gameprocess.h \
+    testgame.h
 
 FORMS    += mainwindow.ui
