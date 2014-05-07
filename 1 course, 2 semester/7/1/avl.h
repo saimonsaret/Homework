@@ -16,8 +16,10 @@ class AVLTree {
 			public:
 				AVLNode() {}
 				AVLNode(AVLNode *parent) : parent(parent) {}
+				///Removes the node from tree, keeping right balance
 				void remove();
 				void updateHeight();
+				///Makes *newNode a son of *parent (left or right, depending on values)
 				static void updateParent(int value, AVLNode *parent, AVLNode *newNode);
 				int findBalance();
 
@@ -29,9 +31,12 @@ class AVLTree {
 				AVLNode *parent = nullptr;
 		};
 
+		///Right rebalance rotation
 		static AVLNode *rightRotation(AVLNode *root);
+		///Left rebalance rotation
 		static AVLNode *leftRotation(AVLNode *root);
 		static AVLNode *balanceNode(AVLNode *currentNode);
+		///Finds out, if subtree is not balanced, and balance, if it is
 		static void tryToBalance(AVLNode *currentNode);
 		static AVLNode *findAndDeleteMinNode(AVLNode *currentNode);
 		static void addSubtreeValue(AVLNode *currentNode, AVLNode *parent, int value);

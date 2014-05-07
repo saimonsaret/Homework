@@ -8,9 +8,8 @@ AVLTree::AVLTree() {
 	root->value = maxInt;
 }
 
+
 void AVLTree::AVLNode::updateHeight() {
-	if (this == nullptr)
-		return;
 
 	int leftHeight = 0;
 	if (left != nullptr)
@@ -19,6 +18,7 @@ void AVLTree::AVLNode::updateHeight() {
 	if (right != nullptr)
 		rightHeight = right->height;
 	height = std::max(leftHeight, rightHeight) + 1;
+
 }
 
 void AVLTree::AVLNode::updateParent(int value, AVLNode *parent, AVLNode *newNode) {
