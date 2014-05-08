@@ -1,8 +1,9 @@
 #pragma once
 
 class ListError {
-	class NonuniqueElementError{};
-	class NonexistentElementError{};
+	public:
+		class NonuniqueElementError{};
+		class NonexistentElementError{};
 };
 
 

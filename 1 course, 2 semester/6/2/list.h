@@ -5,63 +5,53 @@
 template<typename type>
 class List {
 	public:
-		List() {
-			ListElement<type> *newElement = new ListElement<type>();
-			this->head = newElement;
-		}
+		List();
 
-		~List() {
-			ListElement<type> *currentElement = this->head->next;
-			while (currentElement != nullptr) {
-				this->deleteElement(currentElement->data);
-				currentElement = this->head->next;
-			}
-			delete this->head;
-		}
+		virtual ~List() {}
 
-		void addElement(type value) {
-			if (this->findPrevElement(value)->next == nullptr)
-				ListElement<type> *newElement = new ListElement<type>(this->head, value);
-			else {
-				ListError::NonuniqueElementError error;
-				throw error;
-			}
-		}
+		virtual void addElement(type value) = 0;
 
-		bool deleteElement(type value) {
-			ListElement<type> *prevElement = findPrevElement(value);
-			if (prevElement->next != nullptr) {
-				ListElement<type> *toDelete = prevElement->next;
-				prevElement->next = prevElement->next->next;
-				delete toDelete;
-				return true;
-			} else {
-				ListError::NonexistentElementError error;
-				throw error;
-			}
-		}
+		virtual bool deleteElement(type value) = 0;
 
-		ListElement<type> *findPrevElement(type value) {
-			ListElement<type> *currentElement = this->head;
+		ListElement<type> *findPrevElement(type value);
 
-			while (currentElement->next != nullptr && currentElement->next->data != value)
-				currentElement = currentElement->next;
+		ListElement<type> *findElement(type value);
 
-			return currentElement;
-		}
-
-		int size() {
-			ListElement<type> *currentElement = this->head->next;
-
-			int ans = 0;
-			while (currentElement != nullptr) {
-				ans++;
-				currentElement = currentElement->next;
-			}
-
-			return ans;
-		}
+		int size();
 
 		ListElement<type> *head;
 };
 
+template<typename type>
+List<type>::List() {
+	ListElement<type> *newElement = new ListElement<type>();
+	this->head = newElement;
+}
+
+template<typename type>
+ListElement<type>* List<type>::findPrevElement(type value) {
+	ListElement<type> *currentElement = this->head;
+
+	while (currentElement->next != nullptr && currentElement->next->data != value)
+		currentElement = currentElement->next;
+
+	return currentElement;
+}
+
+template<typename type>
+ListElement<type>* List<type>::findElement(type value) {
+
+	return this->findPrevElement(value)->next;
+
+}
+template<typename type>
+int List<type>::size() {
+	ListElement<type> *currentElement = this->head->next;
+
+	int ans = 0;
+	while (currentElement != nullptr) {
+		ans++;
+		currentElement = currentElement->next;
+	}
+	return ans;
+}

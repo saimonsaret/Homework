@@ -3,6 +3,7 @@
 #include <QTest>
 #include "uniquelist.h"
 
+
 class TestUniqueList : public QObject {
 	Q_OBJECT
 
@@ -32,15 +33,25 @@ class TestUniqueList : public QObject {
 		}
 		void testSameElements() {
 			firstTestUniqueList->addElement(5);
-			firstTestUniqueList->addElement(5);
-			QCOMPARE(firstTestUniqueList->size(), 1);
+			try {
+				firstTestUniqueList->addElement(5);
+			} catch(ListError::NonuniqueElementError) {
+				QCOMPARE(firstTestUniqueList->size(), 1);
+				return;
+			}
+			QFAIL("Exception wasn't thrown");
 		}
 
 		void testDeleteNonexistingElement() {
 			firstTestUniqueList->addElement(5);
-			firstTestUniqueList->deleteElement(3);
-			QCOMPARE(firstTestUniqueList->size(), 1);
-			QVERIFY(firstTestUniqueList->findElement(5));
+			try {
+				firstTestUniqueList->deleteElement(3);
+			} catch(ListError::NonexistentElementError) {
+				QCOMPARE(firstTestUniqueList->size(), 1);
+				QVERIFY(firstTestUniqueList->findElement(5));
+				return;
+			}
+			QFAIL("Exception wasn't thrown");
 		}
 
 		void testIntersection() {

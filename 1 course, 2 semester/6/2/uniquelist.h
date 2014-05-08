@@ -4,68 +4,88 @@
 #include <iostream>
 
 template<typename type>
-class UniqueList {
+class UniqueList : public List<type> {
 	public:
-		UniqueList() {
-			list = new List<type>;
-		}
-		~UniqueList() {
-			delete list;
-		}
-		void addElement(type value) {
-			try {
-				list->addElement(value);
-			} catch(ListError::NonuniqueElementError &) {
-				std::cout << "This element is alredy in the list!\n";
-			}
-		}
-		bool deleteElement(type value) {
-			try {
-				return list->deleteElement(value);
-			} catch(ListError::NonexistentElementError &) {
-				std::cout << "There is no element with such value in the list!\n";
-			}
-		}
-		bool findElement(type value) {
-			return (list->findPrevElement(value)->next != nullptr);
-		}
-		static UniqueList<type> *findIntersection(UniqueList *firstUniqueList, UniqueList *secondUniqueList) {
 
-			UniqueList<type> *newUniqueList = new UniqueList<type>;
+		~UniqueList();
 
-			ListElement<type> *element = firstUniqueList->list->head->next;
-			while (element != nullptr) {
-				if (secondUniqueList->findElement(element->data))
-					newUniqueList->addElement(element->data);
-				element = element->next;
-			}
+		void addElement(type value);
 
-			return newUniqueList;
-		}
+		bool deleteElement(type value);
 
-		static UniqueList *findUnion(UniqueList *firstUniqueList, UniqueList *secondUniqueList) {
+		static UniqueList<type> *findIntersection(UniqueList *firstUniqueList, UniqueList *secondUniqueList);
 
-			UniqueList<type> *newUniqueList = new UniqueList<type>;
-
-			ListElement<type> *element = firstUniqueList->list->head->next;
-			while (element != nullptr) {
-				newUniqueList->addElement(element->data);
-				element = element->next;
-			}
-
-			element = secondUniqueList->list->head->next;
-			while (element != nullptr) {
-				newUniqueList->addElement(element->data);
-				element = element->next;
-			}
-
-			return newUniqueList;
-		}
-
-		int size() {
-			return list->size();
-		}
-
-	private:
-		List<type> *list;
+		static UniqueList *findUnion(UniqueList *firstUniqueList, UniqueList *secondUniqueList);
 };
+
+template<typename type>
+UniqueList<type>::~UniqueList() {
+	ListElement<type> *currentElement = this->head->next;
+	while (currentElement != nullptr) {
+		this->deleteElement(currentElement->data);
+		currentElement = this->head->next;
+	}
+	delete this->head;
+}
+
+template<typename type>
+void UniqueList<type>::addElement(type value) {
+	if (this->findElement(value) == nullptr)
+		ListElement<type> *newElement = new ListElement<type>(this->head, value);
+	else {
+		ListError::NonuniqueElementError error;
+		throw error;
+	}
+}
+
+template<typename type>
+UniqueList<type>* UniqueList<type>::findIntersection(UniqueList *firstUniqueList, UniqueList *secondUniqueList) {
+
+	UniqueList<type> *newUniqueList = new UniqueList<type>;
+
+	ListElement<type> *element = firstUniqueList->head->next;
+	while (element != nullptr) {
+		if (secondUniqueList->findElement(element->data) != nullptr)
+			newUniqueList->addElement(element->data);
+		element = element->next;
+	}
+
+	return newUniqueList;
+}
+
+template<typename type>
+bool UniqueList<type>::deleteElement(type value) {
+	ListElement<type> *prevElement = this->findPrevElement(value);
+	if (prevElement->next != nullptr) {
+		ListElement<type> *toDelete = prevElement->next;
+		prevElement->next = prevElement->next->next;
+		delete toDelete;
+		return true;
+	} else {
+		ListError::NonexistentElementError error;
+		throw error;
+	}
+}
+
+template<typename type>
+UniqueList<type>* UniqueList<type>::findUnion(UniqueList *firstUniqueList, UniqueList *secondUniqueList) {
+
+	UniqueList<type> *newUniqueList = new UniqueList<type>;
+
+	ListElement<type> *element = firstUniqueList->head->next;
+	while (element != nullptr) {
+		newUniqueList->addElement(element->data);
+		element = element->next;
+	}
+
+	element = secondUniqueList->head->next;
+	while (element != nullptr) {
+		try {
+			newUniqueList->addElement(element->data);
+		} catch (ListError::NonuniqueElementError) {
+		}
+		element = element->next;
+	}
+
+	return newUniqueList;
+}
