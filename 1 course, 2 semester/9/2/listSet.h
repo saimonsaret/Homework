@@ -8,7 +8,9 @@ template<class T>
 class ListSet : public Set<T>
 {
 public:
-	ListSet() { }
+	ListSet() {
+		next = NULL;
+	}
 	~ListSet();
 	bool isEmpty();
 	ListSet* find(T);
@@ -82,7 +84,7 @@ void ListSet<T>::deleteElement(T value)
 	ListSet<T> *temp = this->find(value);
 	if (temp)
 	{
-		ListSet<T> *current = this->next;
+		ListSet<T> *current = this;
 
 		while (current->next != temp)
 		{
@@ -122,7 +124,7 @@ void ListSet<T>::intersect(Set<T>* nSet)
 		ListSet* temp = 0;
 		if (!nSet->find(tmp->value))
 		{
-			temp = NULL;
+			temp = tmp;
 			tmp = tmp->next;
 			this->deleteElement(temp->value);
 		}

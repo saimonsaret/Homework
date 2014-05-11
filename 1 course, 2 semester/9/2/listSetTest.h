@@ -28,7 +28,7 @@ private slots:
 	{
 		intSet->add(15);
 		intSet->deleteElement(15);
-		QVERIFY(intSet->find(15));
+		QVERIFY(!intSet->find(15));
 	}
 	void testUnite()
 	{
