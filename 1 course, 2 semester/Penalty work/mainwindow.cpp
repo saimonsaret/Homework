@@ -65,11 +65,7 @@ void MainWindow::loadForm() {
 void MainWindow::createForm(WidgetTree *tree) {
 
 	FormCreator creator;
-	try {
-		creator.createForm(tree->ui->children->at(0), mainLayout);
-	} catch (FormCreationError &error) {
-		throw error;
-	}
+	creator.createForm(tree->ui->children->at(0), mainLayout);
 }
 
 void MainWindow::deleteForm(QLayout *layout) {

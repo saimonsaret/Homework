@@ -69,12 +69,7 @@ QObject* FormCreator::createSubform(WidgetTreeElement *currentElement, QLayout *
 	if (parentLayoutType == "" || parentLayoutType == "grid") {
 		QGridLayout *layout = dynamic_cast<QGridLayout*>(parent);
 
-		QObject *newObject;
-		try {
-			newObject = createObject(currentElement);
-		} catch (FormCreationError &error) {
-			throw error;
-		}
+		QObject *newObject = createObject(currentElement);
 
 		if (name == "layout")
 			layout->addLayout(dynamic_cast<QLayout*>(newObject), row, col);
@@ -87,12 +82,8 @@ QObject* FormCreator::createSubform(WidgetTreeElement *currentElement, QLayout *
 	if (parentLayoutType == "vertical") {
 		QVBoxLayout *layout = dynamic_cast<QVBoxLayout*>(parent);
 
-		QObject *newObject;
-		try {
-			newObject = createObject(currentElement);
-		} catch (FormCreationError &error) {
-			throw error;
-		}
+		QObject *newObject = createObject(currentElement);
+
 		if (name == "layout")
 			layout->insertLayout(row, dynamic_cast<QLayout*>(newObject));
 		if (name == "widget")
@@ -104,12 +95,8 @@ QObject* FormCreator::createSubform(WidgetTreeElement *currentElement, QLayout *
 	if (parentLayoutType == "horizontal") {
 		QHBoxLayout *layout = dynamic_cast<QHBoxLayout*>(parent);
 
-		QObject *newObject;
-		try {
-			newObject = createObject(currentElement);
-		} catch (FormCreationError &error) {
-			throw error;
-		}
+		QObject *newObject = createObject(currentElement);
+
 		if (name == "layout")
 			layout->insertLayout(col, dynamic_cast<QLayout*>(newObject));
 		if (name == "widget")
@@ -124,12 +111,7 @@ QObject* FormCreator::createSubform(WidgetTreeElement *currentElement, QLayout *
 
 void FormCreator::createForm(WidgetTreeElement *element, QLayout *parent) {
 
-	QObject *newObject;
-	try {
-		newObject = createSubform(element, parent);
-	} catch (FormCreationError &error) {
-		throw error;
-	}
+	QObject *newObject = createSubform(element, parent);
 
 	for (int i = 0; i < element->children->size(); i++) {
 		createForm(element->children->at(i), dynamic_cast<QLayout*>(newObject));
