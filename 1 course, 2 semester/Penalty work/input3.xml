@@ -1,0 +1,13 @@
+<ui>
+	<layout type="horizontal">
+		<item col="0">
+			<widget type="button" text="This is left button"></widget>
+		</item>
+		<item col="1">
+			<widget type="lineEdit" text="This is central lineEdit"></widget>
+		</item>
+		<item col="2">
+			<widget type="label" text="This is right label"></widget>
+		</item>
+	</layout>
+</ui>

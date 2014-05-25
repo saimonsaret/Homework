@@ -1,0 +1,21 @@
+<ui>
+	<layout type="vertical">
+		<item row="0">
+			<layout type="horizontal">
+				<item col="0"><widget type="label" text="Expression: "/></item>
+				<item col="1"><widget type="lineEdit" text=""/></item>
+			</layout>
+		</item>
+		
+		<item row="1">
+			<layout type="grid">
+				<item row="0" col="0"><widget type="button" text="0"/></item>
+				<item row="0" col="1"><widget type="button" text="1"/></item>
+				<item row="0" col="2"><widget type="button" text="2"/></item>
+				<item row="1" col="0"><widget type="button" text="3"/></item>
+				<item row="1" col="1"><widget type="button" text="4"/></item>
+				<item row="1" col="2"><widget type="button" text="5"/></item>
+			</layout>		
+		</item>
+	</layout>		
+</ui>
