@@ -13,11 +13,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	std::cin >> n;
 
 	comps = new Computer*[n];
+	Randomizer *randomizer = new TrueRandomizer;
 	for (int i = 0; i < n; i++) {
 		int isIll = 0;
 		double chance = 0;
 		std::cin >> isIll >> chance;
-		comps[i] = new Computer(isIll, chance);
+		comps[i] = new Computer(isIll, chance, randomizer);
 	}
 
 	for (int i = 0; i < n; i++) {
@@ -76,5 +77,5 @@ void MainWindow::updateUI() {
 	for (int i = 0; i < n; i++)
 		if (comps[i]->isIll())
 			illnessLabels[i]->setText("Infected!");
-	updateTimer->start(3000);
+	updateTimer->start(timerDelay);
 }

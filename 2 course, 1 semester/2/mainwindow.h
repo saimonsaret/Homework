@@ -22,6 +22,7 @@ private slots:
 
 private:
 	void initializeUI();
+	///Update turn label and computers infections
 	void updateUI();
 	Ui::MainWindow *ui;
 	QLabel *turnLabel;
@@ -30,6 +31,7 @@ private:
 	QTimer *updateTimer;
 	int n = 0;
 	int turn = 0;
+	const int timerDelay = 3000;
 };
 
 #endif // MAINWINDOW_H

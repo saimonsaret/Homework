@@ -1,11 +1,13 @@
 #pragma once
 #include <QSet>
 #include <QString>
+#include "randomizer.h"
 
 class Computer {
 public:
-	Computer() {}
-	Computer(bool isIll, double chanceToFallIll);
+	Computer(bool isIll, double chanceToFallIll, Randomizer *newRandomizer);
+	~Computer();
+	///Try to infect adjacent comps
 	void makeTurn();
 	bool isIll();
 	void setAdjacentComputers(QSet<Computer*> *edges);
@@ -15,5 +17,5 @@ private:
 	bool illness;
 	double chance;
 	QSet<Computer*> *adjacentComputers;
-	std::default_random_engine re;
+	Randomizer *randomizer;
 };

@@ -20,6 +20,7 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     computer.h \
-    test.h
+    test.h \
+    randomizer.h
 
 FORMS    += mainwindow.ui

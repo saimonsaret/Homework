@@ -1,13 +1,17 @@
 #include "computer.h"
-#include <chrono>
 
-Computer::Computer(bool isIll, double chanceToFallIll) : illness(isIll), chance(chanceToFallIll) {
-	re.seed(std::chrono::system_clock::now().time_since_epoch().count());
+Computer::Computer(bool isIll, double chanceToFallIll, Randomizer *newRandomizer) : illness(isIll), chance(chanceToFallIll), randomizer(newRandomizer) {
+}
+
+Computer::~Computer() {
+	delete adjacentComputers;
 }
 
 void Computer::makeTurn() {
-	foreach (Computer *comp, *adjacentComputers)
-		tryToInfect(comp);
+	if (isIll())
+		foreach (Computer *comp, *adjacentComputers)
+			if (!comp->isIll())
+				tryToInfect(comp);
 }
 
 void Computer::setAdjacentComputers(QSet<Computer*> *edges) {
@@ -23,7 +27,6 @@ double Computer::getChance() {
 }
 
 void Computer::tryToInfect(Computer *comp){
-	double x = std::generate_canonical<double, 10>(re);
-	if (x <= comp->getChance())
+	if (randomizer->getRandom() <= comp->getChance())
 		comp->illness = true;
 }
